@@ -27,7 +27,7 @@
 							<a href="<?php echo base_url('transaction/joborder') ?>">Job Order</a>
 						</li>
 						<li>
-							<a href="<?php echo base_url('transaction/rate_management') ?>">Rate Management</a>
+							<a href="<?php echo base_url('trs/ratemanagement') ?>">Rate Management</a>
 						</li>
 					</ul>
 				</li>	

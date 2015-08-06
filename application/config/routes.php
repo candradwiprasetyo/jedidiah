@@ -259,6 +259,11 @@ $route['joborder/getbydetail/(:any)/(:num)'] = 'baseclass/joborderclass/getbydet
 $route['joborder/commitdetail/(:any)'] = 'baseclass/joborderclass/commitdetail/$1';
 $route['joborder/delete/(:any)'] = 'baseclass/joborderclass/delete/$1';
 
+// transaction rate management
+$route['ratemanagement/getall'] = 'baseclass/ratemanagementclass';
+$route['ratemanagement/getmarketing'] = 'baseclass/ratemanagementclass/getmarketing';
+$route['ratemanagement/getagent'] = 'baseclass/ratemanagementclass/getagent';
+
 
 $route['404_override'] = '';
 

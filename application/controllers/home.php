@@ -60,6 +60,19 @@ class Home extends CI_Controller {
 		}
 		else if($page === "ratemanagement"){
 			
+			$datahead['title'] = "RATE MANAGEMENT";
+			$datanav['activenav'] = "ratemanagement";
+			$dataside['activesidebar'] = "ratemanagement"; // harus ada isinya
+			$databread['breadcumb'] = '<li><a href="">Transaction</a></li>';
+			$databread['breadcumb'] .= '<li><i class="fa fa-angle-right"></i><a href="ratemanagement">Rate Management</a></li>';
+			
+			$this->load->view('template/header.php',$datahead);
+			$this->load->view('template/navigation.php',$datanav);
+			$this->load->view('template/sidebar_transaction.php',$dataside);
+			$this->load->view('template/contentbreadcumb.php',$databread);
+			$this->load->view('transaction/ratemanagement/list.php');	
+			$this->load->view('template/footer.php');	
+
 		}
 		
 		
