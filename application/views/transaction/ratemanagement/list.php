@@ -8,20 +8,22 @@
 					<i class="fa fa-server"></i>
 					LIST RATE MANAGEMENT
 				</h3>
-				<a href="<?php echo base_url('trs/ratemanagement/form') ?>">
-				<button id="btnAddJoborder" class="btn btn-sm btn-default pull-right" style="margin-right:10px">
-					ADD
-				</button>
-				</a>
+					<a href="<?php echo base_url('trs/ratemanagement/form') ?>">
+					<button id="btnAddJoborder" class="btn btn-sm btn-default pull-right" style="margin-right:10px">
+						ADD
+					</button>
+					</a>
 			</div>
 			<div class="box-content nopadding">
 				<table id="tabelRatemanagement" class="table table-hover table-nomargin table-bordered table-condensed">
 					<thead>
 						<tr>
-							<th>No</th>
 							<th>BR No</th>
 							<th>Date</th>
-							<th>Vendor</th>
+							<th>Vendor Name</th>
+							<th>Valid Until</th>
+							<th>Marketing</th>
+							<th>Deal With</th>
 							<th width="110px">Options</th>
 						</tr>
 					</thead>
@@ -34,7 +36,13 @@
 </div>
 		
 
+
 <script>
+
+function get_format_date(str){
+	var result = $.datepicker.formatDate("d/m/yy", new Date(str));
+	return result;
+}
 
 $(document).ready(function(){
 	$('.datepicker').datepicker({
@@ -44,7 +52,56 @@ $(document).ready(function(){
 	});
 	
 	listRatemanagement();
+	
 
+	$('form#formJoborder').bootstrapValidator({
+		feedbackIcons : {
+			valid : 'glyphicon glyphicon-ok',
+			invalid : 'glyphicon glyphicon-remove',
+			validating : 'glyphicon glyphicon-refresh'
+		},
+		fields : {
+			date : {
+				validators : {
+					notEmpty : {
+						message : 'Required - you have to fill this field'
+					}
+				}
+			},
+			costumer : {
+				validators : {
+					notEmpty : {
+						message : 'Required - you have to fill this field'
+					}
+				}
+			}
+		}
+	}).on('success.form.bv', function(e) {
+		e.preventDefault();
+		var $form = $(e.target);
+		var dataSerialize = $form.serialize();
+		
+		$.ajax({
+			type		: "POST",
+			dataType	: 'json',
+			url			: "<?php echo base_url('joborder/commit') ?>",
+			data		: dataSerialize,
+			error		: function(){
+				alert("AJAX Error");
+			},
+			success		: function(json) {
+				window.location.href = "<?php echo base_url('joborder/service/service') ?>" + "/" + json;
+			},
+			complete	: function(){
+				/*listJoborder();
+				$('input#hiddenjoborder').val('');
+				$('form#formJoborder')[0].reset();
+				$('form#formJoborder').data('bootstrapValidator').resetForm();	
+				$('div#modalJoborder').modal("hide");*/
+			}
+		});
+	});
+	
 });
 
 
@@ -62,11 +119,13 @@ function listRatemanagement(){
 				ordering: false,
 				data: json,
 				columns: [
-					{ data: 'rate_management_id' },
-					{ data: 'booking_date' },
-					{ data: 'booking_no' },
-					{ data: 'costumer_code' },
-					{ data: 'status' },
+					
+					{ data: 'rate_management_number' },
+					{ data: 'rate_management_date' },
+					{ data: 'costumer_name' },
+					{ data: 'rate_management_valid_date' },
+					{ data: 'rate_management_marketing' },
+					{ data: 'rate_management_pic' },
 					{ data: null }
 				],
 				"columnDefs": [ 
@@ -78,14 +137,28 @@ function listRatemanagement(){
 						}
 					},	
 					{ 
-						"targets": [3], 
+						"targets": [1], 
 						"render": function ( data, type, row, meta ) {
-							var isi = row.costumer_name + " (" +data+")";
+							var date = get_format_date(row.rate_management_date)
+							return date;
+						}
+					},	
+					{ 
+						"targets": [2], 
+						"render": function ( data, type, row, meta ) {
+							var isi = row.costumer_name;
 							return isi;
 						}
 					},
 					{ 
-						"targets": [5], 
+						"targets": [3], 
+						"render": function ( data, type, row, meta ) {
+							var valid_date = get_format_date(row.rate_management_valid_date)
+							return valid_date;
+						}
+					},	
+					{ 
+						"targets": [6], 
 						"render": function ( data, type, row, meta ) {
 							var edit = '<a class="btn btn-xs" rel="tooltip" title="Fill Form" onclick="return editJoborder(\''+row.job_order_id+'\')" ><i class="fa fa-file-text-o"></i></a> ';
 							var del = '<a class="btn btn-xs" rel="tooltip" title="Delete" onclick="return hapusJoborder(\''+row.job_order_id+'\')" ><i class="fa fa-times"></i></a>';
@@ -102,27 +175,7 @@ function listRatemanagement(){
 	
 }
 
-function fillSelectCostumer(){
-	$.ajax({
-		type		: "POST",
-		dataType	: 'json',
-		url			: "<?php echo base_url("costumer/getby/as_costumer") ?>",
-		success		: function(json){
-			$("select#costumer").empty().append("<option>Loading Data ...</option>");
-		
-			var fillOption = "<option value=''>- Select Costumer -</option>";
-			
-			$.each(json, function(index, row) {
-				fillOption += '<option value="'+row.costumer_code+'">'+row.costumer_name+'</option>';
-			});
 
-			$("select#costumer").empty().append(fillOption);
-		},
-		complete	: function(){
-			$("select#costumer").select2();
-		}
-	});		
-}
 
 function editJoborder(ID){
 	var url = "<?php echo base_url('joborder/service/service') ?>"+"/"+ID;

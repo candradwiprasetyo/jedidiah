@@ -7,12 +7,16 @@
 			
 			<div class="form-group">
 				<label class="col-sm-2 control-label">BR No | Date</label>
-				<div class="col-sm-4">
-					<input type="text" class="form-control input-sm" name="i_rate_management_number" id="i_rate_management_number">
+				<div class="col-sm-2">
+					<input type="hidden" class="form-control input-sm" name="i_row_id" id="i_row_id" value="<?= $row_id ?>">
+					<input type="text" class="form-control input-sm" name="i_rate_management_number" id="i_rate_management_number" value="<?= $rate_management_number ?>">
+				</div>
+				<div class="col-sm-2">
+					<input type="text" class="form-control input-sm datepicker" name="i_rate_management_date" id="i_rate_management_date" value="<?= $rate_management_date?>">
 				</div>
 				<label class="col-sm-2 control-label">Valid Until</label>
 				<div class="col-sm-2">
-					<input type="text" class="form-control input-sm datepicker" name="i_rate_management_valid_date" id="i_rate_management_valid_date">
+					<input type="text" class="form-control input-sm datepicker" name="i_rate_management_valid_date" id="i_rate_management_valid_date" value="<?= $rate_management_valid_date?>">
 				</div>
 			</div>
 			
@@ -59,11 +63,9 @@
 						<div class="col-sm-8">
 							<input type="text" class="form-control input-sm" name="i_rate_management_pic" id="i_rate_management_pic">
 						</div>
-						
 					</div>
-
-					
 				</div>
+                
 			</div>
 			
 			
@@ -209,11 +211,13 @@
 						</div>
 			</div>
 			
-
+		<?php
+        if($row_id){
+		?>
 					
-
+			<div style="max-width:100%; width:100%; border: 1px solid #ccc; overflow-x:scroll;">
 			<div class="table-responsive">
-				<table id="tabelbl" class="table table-condensed table-striped table-hover table-bordered">
+				<table id="tabelbl" class="table table-condensed table-striped table-hover table-bordered" style="width: 3000px !important; ">
 					<caption class="bg-primary">Rate & Charge</caption>
 					<thead>
 						<tr>
@@ -241,6 +245,7 @@
 						
 					</tbody>
 				</table>
+			</div>
 			</div>
 			
 			<br>
@@ -279,8 +284,12 @@
 					</tbody>
 				</table>
 			</div>
+            
+            
 				
-		
+		<?php
+		}
+		?>
 			
 			
 			<hr>
@@ -322,7 +331,6 @@
 		});
 		
 		$("select#i_costumer_code").change(function(){
-			
 			onChangeCostumerCode();
 		});
 		
@@ -342,6 +350,51 @@
 				valid : 'glyphicon glyphicon-ok',
 				invalid : 'glyphicon glyphicon-remove',
 				validating : 'glyphicon glyphicon-refresh'
+			},
+			
+			fields : {
+				i_rate_management_number : {
+					validators : {
+						notEmpty : {
+							message : 'Required - you have to fill this field'
+						}
+					}
+				},
+				i_costumer_code : {
+					validators : {
+						notEmpty : {
+							message : 'Required - you have to fill this field'
+						}
+					}
+				},
+				i_rate_management_marketing : {
+					validators : {
+						notEmpty : {
+							message : 'Required - you have to fill this field'
+						}
+					}
+				},
+				i_rate_management_pic : {
+					validators : {
+						notEmpty : {
+							message : 'Required - you have to fill this field'
+						}
+					}
+				},
+				i_service_marketing_id : {
+					validators : {
+						notEmpty : {
+							message : 'Required - you have to fill this field'
+						}
+					}
+				},
+				i_service_agent_id : {
+					validators : {
+						notEmpty : {
+							message : 'Required - you have to fill this field'
+						}
+					}
+				}
 			}
 		}).on('success.form.bv', function(e) {
 			e.preventDefault();
@@ -351,13 +404,14 @@
 			$.ajax({
 				type		: "POST",
 				dataType	: 'json',
-				url			: "<?php echo base_url('joborder/commit/documentation') ?>",
+				url			: "<?php echo base_url('trs/ratemanagement/commit/'.$row_id) ?>",
 				data		: dataSerialize,
 				error		: function(){
 					alert("AJAX Error");
 				},
 				success		: function(json) {
 					alert(json);
+					window.location.href = "<?php echo base_url('trs/ratemanagement') ?>";
 				},
 				complete	: function(){
 					$('input#codedocumentation').val('');
@@ -400,28 +454,7 @@
 		
 	});
 	
-	function onChangeInsurance(value){
-		if (value == "Cover by Us"){
-			$("select#insurancecondition").prop("disabled",false);
-			$("select#insurancevalue").prop("disabled",false);
-		}
-		else{
-			$("select#insurancecondition").prop("disabled",true);
-			$("select#insurancevalue").prop("disabled",true);
-		}
-	}
 
-	function onChangeCostumerCode(){
-		var costumer_address = $("select#i_costumer_code option:selected").data("address");
-		var costumer_phone = $("select#i_costumer_code option:selected").data("phone");
-		var costumer_email = $("select#i_costumer_code option:selected").data("email");
-		
-		$("textarea#i_costumer_address").val(costumer_address);
-		$("input#i_costumer_phone").val(costumer_phone);
-		$("input#i_costumer_email").val(costumer_email);
-		
-
-	}
 
 	function  getDataDocumentation(IDJobOrder){
 		fillSelectCostumerCode();
@@ -493,23 +526,31 @@
 					no = row.detail_billofleading_id;
 					
 					isiTrow = '<tr id="'+no+'">';
-					isiTrow += '<td><select class="form-control input-sm" name="t_charge_name" id="t_charge_name">'+optionCharge+'</select></td>';
-					isiTrow += '<td><select class="form-control input-sm" name="t_charge_name" id="t_charge_name">'+optionCharge+'</select></td>';
-					isiTrow += '<td><select class="form-control input-sm" name="t_charge_name" id="t_charge_name">'+optionCharge+'</select></td>';
-					isiTrow += '<td><select class="form-control input-sm" name="t_charge_name" id="t_charge_name">'+optionCharge+'</select></td>';
-					isiTrow += '<td><select class="form-control input-sm" name="t_charge_name" id="t_charge_name">'+optionCharge+'</select></td>';
-					isiTrow += '<td><select class="form-control input-sm" name="t_charge_name" id="t_charge_name">'+optionCharge+'</select></td>';
-					isiTrow += '<td><select class="form-control input-sm" name="t_charge_name" id="t_charge_name">'+optionCharge+'</select></td>';
-					isiTrow += '<td><select class="form-control input-sm" name="t_charge_name" id="t_charge_name">'+optionCharge+'</select></td>';
-					isiTrow += '<td><select class="form-control input-sm" name="t_charge_name" id="t_charge_name">'+optionCharge+'</select></td>';
-					isiTrow += '<td><select class="form-control input-sm" name="t_charge_name" id="t_charge_name">'+optionCharge+'</select></td>';
-					isiTrow += '<td><select class="form-control input-sm" name="t_charge_name" id="t_charge_name">'+optionCharge+'</select></td>';
-					isiTrow += '<td><select class="form-control input-sm" name="t_charge_name" id="t_charge_name">'+optionCharge+'</select></td>';
-					isiTrow += '<td><select class="form-control input-sm" name="t_charge_name" id="t_charge_name">'+optionCharge+'</select></td>';
-					isiTrow += '<td><select class="form-control input-sm" name="t_charge_name" id="t_charge_name">'+optionCharge+'</select></td>';
-					isiTrow += '<td><select class="form-control input-sm" name="t_charge_name" id="t_charge_name">'+optionCharge+'</select></td>';
-					isiTrow += '<td><select class="form-control input-sm" name="t_charge_name" id="t_charge_name">'+optionCharge+'</select></td>';
-					isiTrow += '<td><select class="form-control input-sm" name="t_charge_name" id="t_charge_name">'+optionCharge+'</select></td>';
+					isiTrow += '<td><select class="form-control input-sm" name="t_charge" id="t_charge"">'+optionCharge+'</select></td>';
+					isiTrow += '<td><select class="form-control input-sm" name="t_origin" id="t_origin">'+optionOrigin+'</select></td>';
+					isiTrow += '<td><select class="form-control input-sm" name="t_destination" id="t_destination">'+optionDestination+'</select></td>';
+					isiTrow += '<td><select class="form-control input-sm" name="t_unit" id="t_unit">'+optionUnit+'</select></td>';
+					isiTrow += '<td><select class="form-control input-sm" name="t_currency" id="t_currency">'+optionCurrency+'</select></td>';
+					isiTrow += '<td><input type="text" class="form-control input-sm" name="t_buying" id="t_buying" value=""></td>';
+					isiTrow += '<td><select class="form-control input-sm" name="t_movement" id="t_movement">'+optionMovement+'</select></td>';
+					isiTrow += '<td><select class="form-control input-sm" name="t_load" id="t_load">';
+					isiTrow += '<option>- Select Load Type -</option>';
+					isiTrow += '<option value="FCL/FCL">FCL/FCL </option>';
+					isiTrow += '<option value="FCL/FCL">LCL/LCL  </option>';
+					isiTrow += '<option value="FCL/FCL">FCL/LCL  </option>';
+					isiTrow += '<option value="FCL/FCL">LCL/FCL  </option>';
+					isiTrow += '<option value="FCL/FCL">Break-bulk  </option>';
+					isiTrow += '<option value="FCL/FCL">Bulk </option>';
+					isiTrow += '</select></td>';
+					isiTrow += '<td><select class="form-control input-sm" name="t_pc" id="t_pc">'+optionCharge+'</select></td>';
+					isiTrow += '<td><select class="form-control input-sm" name="t_cargo" id="t_cargo">'+optionCargo+'</select></td>';
+					isiTrow += '<td><select class="form-control input-sm" name="t_transshipment" id="t_transshipment">'+optionCharge+'</select></td>';
+					isiTrow += '<td><input type="text" class="form-control input-sm" name="t_time" id="t_time" value=""></td>';
+					isiTrow += '<td><input type="text" class="form-control input-sm" name="t_free_dem" id="t_free_dem" value=""></td>';
+					isiTrow += '<td><input type="text" class="form-control input-sm" name="t_free_det" id="t_free_det" value=""></td>';
+					isiTrow += '<td><input type="text" class="form-control input-sm" name="t_free_dem_det" id="t_free_dem_det" value=""></td>';
+					isiTrow += '<td><input type="text" class="form-control input-sm" name="t_min_qty" id="t_min_qty" value=""></td>';
+					isiTrow += '<td><input type="text" class="form-control input-sm" name="t_remark" id="t_remark" value=""></td>';
 					isiTrow += '<td class="text-center">';
 					isiTrow += '<button type="button" class="btn btn-xs btn-info" id="btnWdBl" onclick="return onClickWdBl('+no+')" >WD</button> ';
 					isiTrow += '<button style="display:none" type="button" class="btn btn-xs btn-danger" id="btnSaveBl" onclick="return onClickSaveBl('+no+')" >Save</button> ';
@@ -526,9 +567,9 @@
 					thisRow.find("select#loadtype").val(row.load_type);
 				});
 			},
-			error		: function(){
-				alert("error");
-			}
+			//error		: function(){
+			//	alert("error");
+			//}
 		});	
 		
 		var number = no+1;
@@ -536,26 +577,7 @@
 		$("table#tabelbl tbody").append(newRow);
 	}
 	
-	function fillSelectMovement(){
-		var isi = "";
-		$.ajax({
-			async		: false,
-			type		: "POST",
-			dataType	: 'json',
-			url			: "<?php echo base_url('movement/getall') ?>",
-			success		: function(json){
-				var fillOption = "<option value=''>- Select Movement -</option>";
-				$.each(json, function(index, row) {
-					fillOption += '<option value="'+row.movement_code+'">'+row.movement_code+'</option>';
-				});
-				isi = fillOption;
-			},
-			error		: function(){
-				alert("error");
-			}
-		});	
-		return isi;
-	}
+	
 
 	function fillSelectCharge(){
 		var isi = "";
@@ -577,34 +599,165 @@
 		});	
 		return isi;
 	}
+
+	function fillSelectCity(type){
+		var isi = "";
+		$.ajax({
+			async		: false,
+			type		: "POST",
+			dataType	: 'json',
+			url			: "<?php echo base_url('city/getall') ?>",
+			success		: function(json){
+				if(type==1){
+					var fillOption = "<option value=''>- Select Origin -</option>";
+				}else{
+					var fillOption = "<option value=''>- Select Destination -</option>";
+				}
+				$.each(json, function(index, row) {
+					fillOption += '<option value="'+row.city_code+'">'+row.city_name+'</option>';
+				});
+				isi = fillOption;
+			},
+			error		: function(){
+				alert("error");
+			}
+		});	
+		return isi;
+	}
+
+	function fillSelectUnit(){
+		var isi = "";
+		$.ajax({
+			async		: false,
+			type		: "POST",
+			dataType	: 'json',
+			url			: "<?php echo base_url('unit/getall') ?>",
+			success		: function(json){
+				
+				var fillOption = "<option value=''>- Select Unit -</option>";
+				
+				$.each(json, function(index, row) {
+					fillOption += '<option value="'+row.unit_code+'">'+row.unit_name+'</option>';
+				});
+				isi = fillOption;
+			},
+			error		: function(){
+				alert("error");
+			}
+		});	
+		return isi;
+	}
+
+	function fillSelectCurrency(){
+		var isi = "";
+		$.ajax({
+			async		: false,
+			type		: "POST",
+			dataType	: 'json',
+			url			: "<?php echo base_url('currency/getall') ?>",
+			success		: function(json){
+				
+				var fillOption = "<option value=''>- Select Currency -</option>";
+				
+				$.each(json, function(index, row) {
+					fillOption += '<option value="'+row.currency_code+'">'+row.currency_name+'</option>';
+				});
+				isi = fillOption;
+			},
+			error		: function(){
+				alert("error");
+			}
+		});	
+		return isi;
+	}
+
+	function fillSelectMovement(){
+		var isi = "";
+		$.ajax({
+			async		: false,
+			type		: "POST",
+			dataType	: 'json',
+			url			: "<?php echo base_url('movement/getall') ?>",
+			success		: function(json){
+				
+				var fillOption = "<option value=''>- Select Movement -</option>";
+				
+				$.each(json, function(index, row) {
+					fillOption += '<option value="'+row.movement_code+'">'+row.movement_description+'</option>';
+				});
+				isi = fillOption;
+			},
+			error		: function(){
+				alert("error");
+			}
+		});	
+		return isi;
+	}
+
+	function fillSelectCargo(){
+		var isi = "";
+		$.ajax({
+			async		: false,
+			type		: "POST",
+			dataType	: 'json',
+			url			: "<?php echo base_url('cargo/getall') ?>",
+			success		: function(json){
+				
+				var fillOption = "<option value=''>- Select Cargo Type -</option>";
+				
+				$.each(json, function(index, row) {
+					fillOption += '<option value="'+row.cargo_code+'">'+row.cargo_type+'</option>';
+				});
+				isi = fillOption;
+			},
+			error		: function(){
+				alert("error");
+			}
+		});	
+		return isi;
+	}
 	
 	function generateRowBl(no){
 		var isiTrow = '';
-		var optionMovement = fillSelectMovement();
 		var optionCharge = fillSelectCharge();
-	
+		var optionOrigin = fillSelectCity(1);
+		var optionDestination = fillSelectCity(2);
+		var optionUnit = fillSelectUnit();
+		var optionCurrency = fillSelectCurrency();
+		var optionMovement = fillSelectMovement();
+		var optionCargo = fillSelectCargo();
+
 		isiTrow = '<tr id="'+no+'">';
-		isiTrow += '<td><select class="form-control input-sm" name="t_charge_name" id="t_charge_name">'+optionCharge+'</select></td>';
-		isiTrow += '<td><select class="form-control input-sm" name="t_charge_name" id="t_charge_name">'+optionCharge+'</select></td>';
-		isiTrow += '<td><select class="form-control input-sm" name="t_charge_name" id="t_charge_name">'+optionCharge+'</select></td>';
-		isiTrow += '<td><select class="form-control input-sm" name="t_charge_name" id="t_charge_name">'+optionCharge+'</select></td>';
-		isiTrow += '<td><select class="form-control input-sm" name="t_charge_name" id="t_charge_name">'+optionCharge+'</select></td>';
-		isiTrow += '<td><select class="form-control input-sm" name="t_charge_name" id="t_charge_name">'+optionCharge+'</select></td>';
-		isiTrow += '<td><select class="form-control input-sm" name="t_charge_name" id="t_charge_name">'+optionCharge+'</select></td>';
-		isiTrow += '<td><select class="form-control input-sm" name="t_charge_name" id="t_charge_name">'+optionCharge+'</select></td>';
-		isiTrow += '<td><select class="form-control input-sm" name="t_charge_name" id="t_charge_name">'+optionCharge+'</select></td>';
-		isiTrow += '<td><select class="form-control input-sm" name="t_charge_name" id="t_charge_name">'+optionCharge+'</select></td>';
-		isiTrow += '<td><select class="form-control input-sm" name="t_charge_name" id="t_charge_name">'+optionCharge+'</select></td>';
-		isiTrow += '<td><select class="form-control input-sm" name="t_charge_name" id="t_charge_name">'+optionCharge+'</select></td>';
-		isiTrow += '<td><select class="form-control input-sm" name="t_charge_name" id="t_charge_name">'+optionCharge+'</select></td>';
-		isiTrow += '<td><select class="form-control input-sm" name="t_charge_name" id="t_charge_name">'+optionCharge+'</select></td>';
-		isiTrow += '<td><select class="form-control input-sm" name="t_charge_name" id="t_charge_name">'+optionCharge+'</select></td>';
-		isiTrow += '<td><select class="form-control input-sm" name="t_charge_name" id="t_charge_name">'+optionCharge+'</select></td>';
-		isiTrow += '<td><select class="form-control input-sm" name="t_charge_name" id="t_charge_name">'+optionCharge+'</select></td>';
-		isiTrow += '<td class="text-center">';
+		isiTrow += '<td><select class="form-control input-sm" name="t_charge" id="t_charge" required>'+optionCharge+'</select></td>';
+					isiTrow += '<td><select class="form-control input-sm" name="t_origin" id="t_origin">'+optionOrigin+'</select></td>';
+					isiTrow += '<td><select class="form-control input-sm" name="t_destination" id="t_destination">'+optionDestination+'</select></td>';
+					isiTrow += '<td><select class="form-control input-sm" name="t_unit" id="t_unit">'+optionUnit+'</select></td>';
+					isiTrow += '<td><select class="form-control input-sm" name="t_currency" id="t_currency">'+optionCurrency+'</select></td>';
+					isiTrow += '<td><input type="text" class="form-control input-sm" name="t_buying" id="t_buying" value=""></td>';
+					isiTrow += '<td><select class="form-control input-sm" name="t_movement" id="t_movement">'+optionMovement+'</select></td>';
+					isiTrow += '<td><select class="form-control input-sm" name="t_load" id="t_load">';
+					isiTrow += '<option>- Select Load Type -</option>';
+					isiTrow += '<option value="FCL/FCL">FCL/FCL </option>';
+					isiTrow += '<option value="FCL/FCL">LCL/LCL  </option>';
+					isiTrow += '<option value="FCL/FCL">FCL/LCL  </option>';
+					isiTrow += '<option value="FCL/FCL">LCL/FCL  </option>';
+					isiTrow += '<option value="FCL/FCL">Break-bulk  </option>';
+					isiTrow += '<option value="FCL/FCL">Bulk </option>';
+					isiTrow += '</select></td>';
+					isiTrow += '<td><select class="form-control input-sm" name="t_pc" id="t_pc">'+optionCharge+'</select></td>';
+					isiTrow += '<td><select class="form-control input-sm" name="t_cargo" id="t_cargo">'+optionCargo+'</select></td>';
+					isiTrow += '<td><select class="form-control input-sm" name="t_transshipment" id="t_transshipment">'+optionCharge+'</select></td>';
+					isiTrow += '<td><input type="text" class="form-control input-sm" name="t_time" id="t_time" value=""></td>';
+					isiTrow += '<td><input type="text" class="form-control input-sm" name="t_free_dem" id="t_free_dem" value=""></td>';
+					isiTrow += '<td><input type="text" class="form-control input-sm" name="t_free_det" id="t_free_det" value=""></td>';
+					isiTrow += '<td><input type="text" class="form-control input-sm" name="t_free_dem_det" id="t_free_dem_det" value=""></td>';
+					isiTrow += '<td><input type="text" class="form-control input-sm" name="t_min_qty" id="t_min_qty" value=""></td>';
+					isiTrow += '<td><input type="text" class="form-control input-sm" name="t_remark" id="t_remark" value=""></td>';
+					isiTrow += '<td class="text-center">';
 		isiTrow += '<button style="display:none" type="button" class="btn btn-xs btn-info" id="btnWdBl" onclick="return onClickWdBl('+no+')" >WD</button> ';
 		isiTrow += '<button type="button" class="btn btn-xs btn-danger" id="btnSaveBl" onclick="return onClickSaveBl('+no+')" >Save</button> ';
 		isiTrow += '<button type="button" class="btn btn-xs btn-success" id="btnAddBl" onclick="return onClickAddBl('+no+')"> Add </button> ';
+		isiTrow += '<button type="button" class="btn btn-xs btn-success" id="btnDelBl" onclick="return onClickDelBl('+no+')"> Del </button> ';
 		isiTrow += '<input type="hidden" id="idBl" />';
 		isiTrow += '</td>';
 		isiTrow += '</tr>';
@@ -621,30 +774,109 @@
 		tRow.find("button#btnAddBl").hide();
 	}
 	
+	function deleteRow(number)  
+	{   
+		var row = document.getElementById(number);
+		var table = row.parentNode;
+		while ( table && table.tagName != 'TABLE' )
+			table = table.parentNode;
+		if ( !table )
+			return;
+		table.deleteRow(row.rowIndex);
+	}
+	
+	function onClickDelBl(number){
+		 number--;
+ 
+		 var rowCount = document.getElementById('tabelbl').rows.length;
+		 //var last_row = $('table#tabelbl tr:last').attr('id');
+		 
+		 rowCount--; 
+		// alert (number+"-"+rowCount);		 
+		 if(rowCount >= number){
+		 	var tRow = $("table#tabelbl tbody").find("tr#"+number);
+		 	tRow.find("button#btnAddBl").show();
+		 }
+		 
+		 number_delete = number+1;
+		 var tRow_delete = $("table#tabelbl tbody").find("tr#"+number_delete);
+		 //document.getElementById('tabelbl').deleteRow(number);
+		 $("table#tabelbl tr:eq("+number_delete+")").remove();
+		
+	}
+	
+	function onClickDelIE(number){
+		 number--;
+ 
+		 var rowCount = document.getElementById('tabel2').rows.length;
+		 //var last_row = $('table#tabelbl tr:last').attr('id');
+		 
+		 rowCount--; 
+		// alert (number+"-"+rowCount);		 
+		 if(rowCount >= number){
+		 	var tRow = $("table#tabel2 tbody").find("tr#"+number);
+		 	tRow.find("button#btnAddIE").show();
+		 }
+		 
+		 number_delete = number+1;
+		 var tRow_delete = $("table#tabel2 tbody").find("tr#"+number_delete);
+		 //document.getElementById('tabelbl').deleteRow(number);
+		 $("table#tabel2 tr:eq("+number_delete+")").remove();
+		
+	}
+	
+	function onClickDelNote(number){
+		 number--;
+ 
+		 var rowCount = document.getElementById('tabel3').rows.length;
+		 //var last_row = $('table#tabelbl tr:last').attr('id');
+		 
+		 rowCount--; 
+		// alert (number+"-"+rowCount);		 
+		 if(rowCount >= number){
+		 	var tRow = $("table#tabel3 tbody").find("tr#"+number);
+		 	tRow.find("button#btnAddNote").show();
+		 }
+		 
+		 number_delete = number+1;
+		 var tRow_delete = $("table#tabel3 tbody").find("tr#"+number_delete);
+		 //document.getElementById('tabelbl').deleteRow(number);
+		 $("table#tabel3 tr:eq("+number_delete+")").remove();
+		
+	}
+	
 	function onClickSaveBl(number){
 		var tRow = $("table#tabelbl tbody").find("tr#"+number);
 		var thisButton = tRow.find("button#btnSaveBl");
 		var buttonDetail = tRow.find("button#btnWdBl")
 		
-		var idjoborder = $("input#idjoborder").val();
+		var id_ratemanagement = $("input#i_row_id").val();
 		
 		var data_bl = {
-						bl_type: tRow.find("select#bltype").val(), 
-						number: tRow.find("input#number").val(), 
-						original: tRow.find("input#original").val(),
-						copy: tRow.find("input#copy").val(), 
-						freight: tRow.find("input#freight").val(), 
-						status: tRow.find("select#status").val(),
-						movement: tRow.find("select#movement").val(), 
-						load_type: tRow.find("select#loadtype").val(), 
-						note: tRow.find("input#note").val()
+						t_charge: tRow.find("select#t_charge").val(), 
+						t_origin: tRow.find("select#t_origin").val(), 
+						t_destionation: tRow.find("select#t_destination").val(),
+						t_unit: tRow.find("select#t_unit").val(), 
+						t_currency: tRow.find("select#t_currency").val(), 
+						t_buying: tRow.find("input#t_buying").val(),
+						t_movement: tRow.find("select#t_movement").val(), 
+						t_load: tRow.find("select#t_load").val(), 
+						t_pc: tRow.find("select#t_pc").val(),
+						t_cargo: tRow.find("select#t_cargo").val(),
+						t_transshipment: tRow.find("select#t_transshipment").val(),
+						t_time: tRow.find("input#t_time").val(),
+						t_free_dem: tRow.find("input#t_free_dem").val(),
+						t_free_det: tRow.find("input#t_free_det").val(),
+						t_free_dem_det: tRow.find("input#t_free_dem_det").val(),
+						t_min_qty: tRow.find("input#t_min_qty").val(),
+						t_remark: tRow.find("input#t_remark").val()
 					  };
 			
 		$.ajax({
 			type		: "POST",
 			dataType	: 'json',
-			data		: {idjoborder:idjoborder, object_data: data_bl},
-			url			: "<?php echo base_url('joborder/commitdetail/billofleading') ?>",
+			data		: {id_ratemanagement:id_ratemanagement, object_data: data_bl},
+			url			: "<?php echo base_url('ratemanagement/commitdetail') ?>",
 			success		: function(json){
 				tRow.find("input#idBl").val(json);
 				thisButton.hide();
@@ -724,9 +956,9 @@
 				modalWd.find("input#mblFinishedKet").val(json.mbl_finished_ket);
 
 			},
-			error		: function(){
-				alert("error");
-			},
+			//error		: function(){
+			//	alert("error");
+			//},
 			complete	: function(){
 				modalWd.modal("show");
 			}
@@ -765,8 +997,9 @@
 					isiTrow += '<td><input type="text" class="form-control input-sm" name="note" id="note" value="'+row.note+'"></td>';
 					isiTrow += '<td class="text-center">';
 					isiTrow += '<button type="button" class="btn btn-xs btn-info" id="btnWdRequest" onclick="return onClickWdRequest('+no+')" >WD</button> ';
-					isiTrow += '<button style="display:none" type="button" class="btn btn-xs btn-danger" id="btnSaveRequest" onclick="return onClickSaveRequest('+no+')" >Save</button> ';
-					isiTrow += '<button style="display:none" type="button" class="btn btn-xs btn-success" id="btnAddRequest" onclick="return onClickAddRequest('+no+')"> Add </button> ';
+					isiTrow += '<button style="display:none" type="button" class="btn btn-xs btn-danger" id="btnSaveIE" onclick="return onClickSaveIE('+no+')" >Save</button> ';
+					isiTrow += '<button style="display:none" type="button" class="btn btn-xs btn-success" id="btnAddIE" onclick="return onClickAddIE('+no+')"> Add </button> ';
+					isiTrow += '<button type="button" class="btn btn-xs btn-success" id="btnDelBl" onclick="return onClickDelBl('+no+')"> Del </button> ';
 					isiTrow += '<input type="hidden" id="idRequest" value="'+no+'" />';
 					isiTrow += '</td>';
 					isiTrow += '</tr>';
@@ -777,9 +1010,9 @@
 					
 				});
 			},
-			error		: function(){
-				alert("error");
-			}
+			//error		: function(){
+			//	alert("error");
+			//}
 		});	
 	
 		var number = no+1;
@@ -819,9 +1052,9 @@
 					
 				});
 			},
-			error		: function(){
-				alert("error");
-			}
+			//error		: function(){
+			//	alert("error");
+			//}
 		});	
 	
 		var number = no+1;
@@ -854,19 +1087,22 @@
 		var isiTrow = '';
 		var optionDocument = fillSelectDocument();
 		var optionCharge = fillSelectCharge();
+		var optionUnit = fillSelectUnit();
+		var optionCurrency = fillSelectCurrency();
 	
 		isiTrow = '<tr id="'+no+'">';
-		isiTrow += '<td><select class="form-control input-sm" name="document" id="document">'+optionCharge+'</select></td>';
-		isiTrow += '<td><input type="text" class="form-control input-sm" name="number" id="number"></td>';
-		isiTrow += '<td><input type="text" class="form-control input-sm" name="original" id="original"></td>';
-		isiTrow += '<td><input type="text" class="form-control input-sm" name="copy" id="copy"></td>';
-		isiTrow += '<td><input type="text" class="form-control input-sm" name="legalisir" id="legalisir"></td>';
-		isiTrow += '<td><input type="text" class="form-control input-sm" name="note" id="note"></td>';
+		isiTrow += '<td><select class="form-control input-sm" name="t2_charge" id="t2_charge">'+optionCharge+'</select></td>';
+		isiTrow += '<td><select class="form-control input-sm" name="t2_unit" id="t2_unit">'+optionUnit+'</select></td>';
+		isiTrow += '<td><select class="form-control input-sm" name="t2_currency" id="t2_currency">'+optionCurrency+'</select></td>';
+		isiTrow += '<td><input type="text" class="form-control input-sm" name="t2_sell_price" id="t2_sell_price"></td>';
+		isiTrow += '<td><input type="text" class="form-control input-sm" name="t2_in_ex" id="t2_in_ex"></td>';
+		isiTrow += '<td><input type="text" class="form-control input-sm" name="t2_remark" id="t2_remark"></td>';
 		isiTrow += '<td class="text-center">';
-		isiTrow += '<button style="display:none" type="button" class="btn btn-xs btn-info" id="btnWdRequest" onclick="return onClickWdRequest('+no+')" >WD</button> ';
-		isiTrow += '<button type="button" class="btn btn-xs btn-danger" id="btnSaveRequest" onclick="return onClickSaveRequest('+no+')" >Save</button> ';
-		isiTrow += '<button type="button" class="btn btn-xs btn-success" id="btnAddRequest" onclick="return onClickAddRequest('+no+')"> Add </button> ';
-		isiTrow += '<input type="hidden" id="idRequest" />';
+		isiTrow += '<button style="display:none" type="button" class="btn btn-xs btn-info" id="btnWdIE" onclick="return onClickWdIE('+no+')" >WD</button> ';
+		isiTrow += '<button  type="button" class="btn btn-xs btn-danger" id="btnSaveIE" onclick="return onClickSaveIE('+no+')" >Save</button> ';
+		isiTrow += '<button type="button" class="btn btn-xs btn-success" id="btnAddIE" onclick="return onClickAddIE('+no+')"> Add </button> ';
+		isiTrow += '<button type="button" class="btn btn-xs btn-success" id="btnDelIE" onclick="return onClickDelIE('+no+')"> Del </button> ';
+		isiTrow += '<input type="hidden" id="idIE" />';
 		isiTrow += '</td>';
 		isiTrow += '</tr>';
 		
@@ -880,50 +1116,60 @@
 		var optionCharge = fillSelectCharge();
 	
 		isiTrow = '<tr id="'+no+'">';
-		isiTrow += '<td><input type="text" class="form-control input-sm" name="number" id="number"></td>';
+		isiTrow += '<td><input type="text" class="form-control input-sm" name="t3_note" id="t3_note"></td>';
 		isiTrow += '<td class="text-center">';
-		isiTrow += '<button style="display:none" type="button" class="btn btn-xs btn-info" id="btnWdRequest" onclick="return onClickWdRequest('+no+')" >WD</button> ';
-		isiTrow += '<button type="button" class="btn btn-xs btn-danger" id="btnSaveRequest" onclick="return onClickSaveRequest('+no+')" >Save</button> ';
-		isiTrow += '<button type="button" class="btn btn-xs btn-success" id="btnAddRequest" onclick="return onClickAddRequest('+no+')"> Add </button> ';
-		isiTrow += '<input type="hidden" id="idRequest" />';
+		isiTrow += '<button style="display:none" type="button" class="btn btn-xs btn-info" id="btnWdNote" onclick="return onClickWdNote('+no+')" >WD</button> ';
+		isiTrow += '<button type="button" class="btn btn-xs btn-danger" id="btnSaveNote" onclick="return onClickSaveNote('+no+')" >Save</button> ';
+		isiTrow += '<button type="button" class="btn btn-xs btn-success" id="btnAddNote" onclick="return onClickAddNote('+no+')"> Add </button> ';
+		isiTrow += '<button type="button" class="btn btn-xs btn-success" id="btnDelNote" onclick="return onClickDelNote('+no+')"> Del </button> ';
+		isiTrow += '<input type="hidden" id="idNote" />';
 		isiTrow += '</td>';
 		isiTrow += '</tr>';
 		
 		return isiTrow;
 	}
 	
-	function onClickAddRequest(number){
-		var tRow = $("table#tabelRequest tbody").find("tr#"+number);
+	function onClickAddIE(number){
+		var tRow = $("table#tabel2 tbody").find("tr#"+number);
 		var no = number+1;
-		var isiTrow = generateRowRequest(no);
+		var isiTrow = generateRow2(no);
 		
-		$("table#tabelRequest tbody").append(isiTrow);
-		tRow.find("button#btnAddRequest").hide();
+		$("table#tabel2 tbody").append(isiTrow);
+		tRow.find("button#btnAddIE").hide();
 	}
 	
-	function onClickSaveRequest(number){
-		var tRow = $("table#tabelRequest tbody").find("tr#"+number);
-		var thisButton = tRow.find("button#btnSaveRequest");
-		var buttonDetail = tRow.find("button#btnWdRequest")
+	function onClickAddNote(number){
+		var tRow = $("table#tabel3 tbody").find("tr#"+number);
+		var no = number+1;
+		var isiTrow = generateRow3(no);
 		
-		var idjoborder = $("input#idjoborder").val();
+		$("table#tabel3 tbody").append(isiTrow);
+		tRow.find("button#btnAddNote").hide();
+	}
+	
+	function onClickSaveIE(number){
+		var tRow = $("table#tabel2 tbody").find("tr#"+number);
+		var thisButton = tRow.find("button#btnSaveIE");
+		var buttonDetail = tRow.find("button#btnWdIE")
 		
-		var data_request = 	{
-								document_name: tRow.find("select#document").val(), 
-								number: tRow.find("input#number").val(), 
-								original: tRow.find("input#original").val(),
-								copy: tRow.find("input#copy").val(), 
-								legalisir: tRow.find("input#legalisir").val(),
-								note: tRow.find("input#note").val()
+		var id_ratemanagement = $("input#i_row_id").val();
+		
+		var data_ie = 	{
+								t2_charge: tRow.find("select#t2_charge").val(), 
+								t2_unit: tRow.find("select#t2_unit").val(), 
+								t2_currency: tRow.find("select#t2_currency").val(),
+								t2_sell_price: tRow.find("input#t2_sell_price").val(), 
+								t2_in_ex: tRow.find("input#t2_in_ex").val(),
+								t2_remark: tRow.find("input#t2_remark").val()
 							};
 			
 		$.ajax({
 			type		: "POST",
 			dataType	: 'json',
-			data		: {idjoborder:idjoborder, object_data: data_request},
-			url			: "<?php echo base_url('joborder/commitdetail/requestdocument') ?>",
+			data		: {id_ratemanagement:id_ratemanagement, object_data: data_ie},
+			url			: "<?php echo base_url('ratemanagement/commitie') ?>",
 			success		: function(json){
-				tRow.find("input#idRequest").val(json);
+				tRow.find("input#idIE").val(json);
 				buttonDetail.show();
 				thisButton.hide();
 			},
@@ -933,6 +1179,35 @@
 		});	
 	}
 
+
+	function onClickSaveNote(number){
+		var tRow = $("table#tabel3 tbody").find("tr#"+number);
+		var thisButton = tRow.find("button#btnSaveNote");
+		var buttonDetail = tRow.find("button#btnWdNote")
+		
+		var id_ratemanagement = $("input#i_row_id").val();
+		
+		var data_note = 	{
+								t3_note: tRow.find("input#t3_note").val()
+							};
+			
+		$.ajax({
+			type		: "POST",
+			dataType	: 'json',
+			data		: {id_ratemanagement:id_ratemanagement, object_data: data_note},
+			url			: "<?php echo base_url('ratemanagement/commitnote') ?>",
+			success		: function(json){
+				tRow.find("input#idNote").val(json);
+				buttonDetail.show();
+				thisButton.hide();
+			},
+			error		: function(){
+				alert("error");
+			}
+		});	
+	}
+
+	
 	function onClickWdRequest(number){
 		var tRow = $("table#tabelRequest tbody").find("tr#"+number);	
 		var idRequest = tRow.find("input#idRequest").val();

@@ -46,6 +46,20 @@ class Ratemanagementclass extends CI_Controller {
 		echo json_encode($result);
 	}
 	
+	public function commitdetail(){
+		$temp = $this->trs_ratemanagement->commitdetail();
+		echo json_encode($temp);
+	}
+	
+	public function commitie(){
+		$temp = $this->trs_ratemanagement->commitie();
+		echo json_encode($temp);
+	}
+	
+	public function commitnote(){
+		$temp = $this->trs_ratemanagement->commitnote();
+		echo json_encode($temp);
+	}
 }
 
 /* End of file cityclass.php */
