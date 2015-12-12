@@ -1270,7 +1270,6 @@
 			data		: {id_ratemanagement:id_ratemanagement, object_data: data_ie},
 			url			: "<?php echo base_url('ratemanagement/commitie') ?>",
 			success		: function(json){
-				alert("Data saved");
 				tRow.find("input#idIE").val(json);
 				buttonDetail.show();
 				thisButton.hide();
@@ -1299,7 +1298,6 @@
 			data		: {id_ratemanagement:id_ratemanagement, object_data: data_note},
 			url			: "<?php echo base_url('ratemanagement/commitnote') ?>",
 			success		: function(json){
-				alert("Data saved");
 				tRow.find("input#idNote").val(json);
 				buttonDetail.show();
 				thisButton.hide();

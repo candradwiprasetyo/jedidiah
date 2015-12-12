@@ -1,5 +1,4 @@
 
-
 <div class="row">
 
 	<div class="col-sm-12">
@@ -19,14 +18,13 @@
 				<table id="tabelRatemanagement" class="table table-hover table-nomargin table-bordered table-condensed">
 					<thead>
 						<tr>
-							<th>No</th>
+							<th>BR No</th>
 							<th>Date</th>
-							<th>Type</th>
 							<th>Vendor Name</th>
 							<th>Valid Until</th>
 							<th>Marketing</th>
 							<th>Deal With</th>
-							<th>Options</th>
+							<th width="110px">Options</th>
 						</tr>
 					</thead>
 					
@@ -124,7 +122,6 @@ function listRatemanagement(){
 					
 					{ data: 'rate_management_number' },
 					{ data: 'rate_management_date' },
-					{ data: 'rate_management_type_name'},
 					{ data: 'costumer_name' },
 					{ data: 'rate_management_valid_date' },
 					{ data: 'rate_management_marketing' },
@@ -147,28 +144,24 @@ function listRatemanagement(){
 						}
 					},	
 					{ 
-						"targets": [3], 
+						"targets": [2], 
 						"render": function ( data, type, row, meta ) {
 							var isi = row.costumer_name;
 							return isi;
 						}
 					},
 					{ 
-						"targets": [4], 
+						"targets": [3], 
 						"render": function ( data, type, row, meta ) {
 							var valid_date = get_format_date(row.rate_management_valid_date)
 							return valid_date;
 						}
 					},	
 					{ 
-						"targets": [7], 
+						"targets": [6], 
 						"render": function ( data, type, row, meta ) {
 							var edit = '<a href="<?php echo base_url('trs/ratemanagement/form/') ?>'+'/'+row.rate_management_id+'" class="btn btn-xs" rel="tooltip" title="Fill Form" ><i class="fa fa-file-text-o"></i></a> ';
-							if(row.rate_management_type_id == 1){
-								var del = '<a class="btn btn-xs" rel="tooltip" title="Delete" onclick="return hapusRatemanagement(\''+row.rate_management_id+'\')" ><i class="fa fa-times"></i></a>';
-							}else{
-								del = '';
-							}
+							var del = '<a class="btn btn-xs" rel="tooltip" title="Delete" onclick="return hapusRatemanagement(\''+row.rate_management_id+'\')" ><i class="fa fa-times"></i></a>';
 							return edit + del;
 						}
 					}

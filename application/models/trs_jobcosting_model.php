@@ -1,5 +1,5 @@
 <?php
-class Trs_ratemanagement extends CI_Model {
+class Trs_jobcosting_model extends CI_Model {
 
 	public function __construct()
 	{

@@ -1,26 +1,26 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
-class Ratemanagement extends CI_Controller {
+class Jobcosting extends CI_Controller {
 	
 	public function __construct()
 	{
 		parent::__construct();
-		$this->load->model('trs_ratemanagement');
+		$this->load->model('trs_jobcosting_model');
 	}
 
 	public function index()
 	{
-		$datahead['title'] = "RATE MANAGEMENT";
+		$datahead['title'] = "JOB COSTING";
 			$datanav['activenav'] = "transaction";
-			$dataside['activesidebar'] = "ratemanagement"; // harus ada isinya
+			$dataside['activesidebar'] = "jobcosting"; // harus ada isinya
 			$databread['breadcumb'] = '<li><a href="">Transaction</a></li>';
-			$databread['breadcumb'] .= '<li><i class="fa fa-angle-right"></i><a href="ratemanagement">Rate Management</a></li>';
+			$databread['breadcumb'] .= '<li><i class="fa fa-angle-right"></i><a href="jobcosting">Job Costing</a></li>';
 			
 			$this->load->view('template/header.php',$datahead);
 			$this->load->view('template/navigation.php',$datanav);
 			$this->load->view('template/sidebar_transaction.php',$dataside);
 			$this->load->view('template/contentbreadcumb.php',$databread);
-			$this->load->view('transaction/ratemanagement/list.php');	
+			$this->load->view('transaction/jobcosting/list.php');	
 			$this->load->view('template/footer.php');	
 	}
 	
@@ -31,7 +31,7 @@ class Ratemanagement extends CI_Controller {
 		$data = array();
 		if($id==0){
 
-			$get_counter = $this->trs_ratemanagement->get_counter();
+			$get_counter = $this->jobcosting->get_counter();
 
 			$data['row_id']						= '';
 			$data['rate_management_number']		= $get_counter;
@@ -50,22 +50,20 @@ class Ratemanagement extends CI_Controller {
 			$data['service_moving_type']		= '1';
 			$data['service_mode_transport']		= '1';
 			$data['product_type']				= '1';
-			$data['rate_management_margin']				= '';
-			$data['rate_management_type_id']				= '';
 
 		}else{
-			$result = $this->trs_ratemanagement->read_id($id);
+			$result = $this->jobcosting->read_id($id);
 			if($result){
 				$data = $result;
 				$data['row_id'] = $id;
-				$data['rate_management_date'] = $this->trs_ratemanagement->format_date($data['rate_management_date']);
-				$data['rate_management_valid_date'] = $this->trs_ratemanagement->format_date($data['rate_management_valid_date']);
+				$data['rate_management_date'] = $this->jobcosting->format_date($data['rate_management_date']);
+				$data['rate_management_valid_date'] = $this->jobcosting->format_date($data['rate_management_valid_date']);
 			}
 		}
 
 		$datahead['title'] = "FORM RATE MANAGEMENT";
 		$datanav['activenav'] = "transaction";
-		$dataside['activesidebar'] = "ratemanagement";
+		$dataside['activesidebar'] = "jobcosting";
 		$databread['breadcumb'] = '<li><a href="">Transaction</a></li>';
 		$databread['breadcumb'] .= '<li><i class="fa fa-angle-right"></i><a href="">Rate Management</a></li>';
 		$databread['breadcumb'] .= '<li><i class="fa fa-angle-right"></i><a href="">Form</a></li>';
@@ -76,7 +74,7 @@ class Ratemanagement extends CI_Controller {
 		$this->load->view('template/navigation.php',$datanav);
 		$this->load->view('template/sidebar_transaction.php',$dataside);
 		$this->load->view('template/contentbreadcumb.php',$databread);
-		$this->load->view('transaction/ratemanagement/form.php', $data);
+		$this->load->view('transaction/jobcosting/form.php', $data);
 		$this->load->view('template/footer.php');	
 	}	
 
@@ -85,10 +83,10 @@ class Ratemanagement extends CI_Controller {
 		$id = $this->input->post('row_id');
 
 		if(empty($id)){			
-			$temp = $this->trs_ratemanagement->commit();
+			$temp = $this->jobcosting->commit();
 			echo json_encode($temp);
 		}else{
-			$temp = $this->trs_ratemanagement->update($id);
+			$temp = $this->jobcosting->update($id);
 			echo json_encode($temp);
 		}
 		
@@ -96,32 +94,32 @@ class Ratemanagement extends CI_Controller {
 
 	public function getbydetail($id){
 		
-			$data = $this->trs_ratemanagement->getby($id);
+			$data = $this->jobcosting->getby($id);
 			echo json_encode($data);
 	}
 
 	public function getdetailcharge($id){
 		
-			$data = $this->trs_ratemanagement->getdetailcharge($id);
+			$data = $this->jobcosting->getdetailcharge($id);
 			echo json_encode($data);
 	}
 
 	public function getdetailie($id){
 		
-			$data = $this->trs_ratemanagement->getdetailie($id);
+			$data = $this->jobcosting->getdetailie($id);
 			echo json_encode($data);
 	}
 
 	public function getdetailnote($id){
 		
-			$data = $this->trs_ratemanagement->getdetailnote($id);
+			$data = $this->jobcosting->getdetailnote($id);
 			echo json_encode($data);
 	}
 
 	public function deletebl($id){
 
 		
-			$this->trs_ratemanagement->deletebl($id);
+			$this->jobcosting->deletebl($id);
 			echo json_encode("Data deleted");
 		
 		
@@ -130,7 +128,7 @@ class Ratemanagement extends CI_Controller {
 	public function deleteie($id){
 
 		
-			$this->trs_ratemanagement->deleteie($id);
+			$this->jobcosting->deleteie($id);
 			echo json_encode("Data deleted");
 		
 		
@@ -139,14 +137,14 @@ class Ratemanagement extends CI_Controller {
 	public function deletenote($id){
 
 		
-			$this->trs_ratemanagement->deletenote($id);
+			$this->jobcosting->deletenote($id);
 			echo json_encode("Data deleted");
 		
 		
 	}
 
 	public function delete($ID){
-		$result = $this->trs_ratemanagement->delete($ID);
+		$result = $this->jobcosting->delete($ID);
 		if($result){
 			echo json_encode(true);
 		}

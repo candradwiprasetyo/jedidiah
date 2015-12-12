@@ -29,6 +29,9 @@
 						<li>
 							<a href="<?php echo base_url('trs/ratemanagement') ?>">Rate Management</a>
 						</li>
+						<li>
+							<a href="<?php echo base_url('trs/jobcosting') ?>">Job Costing</a>
+						</li>
 					</ul>
 				</li>	
 			</ul>

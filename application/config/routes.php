@@ -267,6 +267,8 @@ $route['ratemanagement/commitdetail'] = 'baseclass/ratemanagementclass/commitdet
 $route['ratemanagement/commitie'] = 'baseclass/ratemanagementclass/commitie';
 $route['ratemanagement/commitnote'] = 'baseclass/ratemanagementclass/commitnote';
 
+// transaction job costing
+$route['jobcosting/getall'] = 'baseclass/jobcostingclass';
 
 $route['404_override'] = '';
 

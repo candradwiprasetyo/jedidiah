@@ -1,7 +1,7 @@
 <div class="tab-content padding tab-content-inline tab-content-bottom">
 	<div class="tab-pane active">
 
-		<form id="formratemanagement" class="form-horizontal" role="form">
+		<form id="formjobcosting" class="form-horizontal" role="form">
 			
 			
 			
@@ -9,14 +9,14 @@
 				<label class="col-sm-2 control-label">BR No | Date</label>
 				<div class="col-sm-2">
 					<input type="hidden" class="form-control input-sm" name="i_row_id" id="i_row_id" value="<?= $row_id ?>">
-					<input type="text" class="form-control input-sm" name="i_rate_management_number" id="i_rate_management_number" value="<?= $rate_management_number ?>">
+					<input type="text" class="form-control input-sm" name="i_jobcosting_number" id="i_jobcosting_number" value="<?= $jobcosting_number ?>">
 				</div>
 				<div class="col-sm-2">
-					<input type="text" class="form-control input-sm datepicker" name="i_rate_management_date" id="i_rate_management_date" value="<?= $rate_management_date?>">
+					<input type="text" class="form-control input-sm datepicker" name="i_jobcosting_date" id="i_jobcosting_date" value="<?= $jobcosting_date?>">
 				</div>
 				<label class="col-sm-2 control-label">Valid Until</label>
 				<div class="col-sm-2">
-					<input type="text" class="form-control input-sm datepicker" name="i_rate_management_valid_date" id="i_rate_management_valid_date" value="<?= $rate_management_valid_date?>">
+					<input type="text" class="form-control input-sm datepicker" name="i_jobcosting_valid_date" id="i_jobcosting_valid_date" value="<?= $jobcosting_valid_date?>">
 				</div>
 			</div>
 			
@@ -54,14 +54,14 @@
 				
 						<label class="col-sm-4 control-label">Marketing</label>
 						<div class="col-sm-8">
-							<input type="text" class="form-control input-sm" name="i_rate_management_marketing" id="i_rate_management_marketing" value="<?= $rate_management_marketing?>">
+							<input type="text" class="form-control input-sm" name="i_jobcosting_marketing" id="i_jobcosting_marketing" value="<?= $jobcosting_marketing?>">
 						</div>
 					</div>
 
 					<div class="form-group">
 						<label class="col-sm-4 control-label">Deal With</label>
 						<div class="col-sm-8">
-							<input type="text" class="form-control input-sm" name="i_rate_management_pic" id="i_rate_management_pic" value="<?= $rate_management_pic ?>">
+							<input type="text" class="form-control input-sm" name="i_jobcosting_pic" id="i_jobcosting_pic" value="<?= $jobcosting_pic ?>">
 						</div>
 					</div>
 				</div>
@@ -210,35 +210,11 @@
 							</div>
 						</div>
 			</div>
-
-			<div class="form-group">
-				
-					
-						<label class="col-sm-2 control-label">Margin (%)</label>
-						<div class="col-sm-4">
-						<input type="number" class="form-control input-sm" name="i_rate_management_margin" id="i_rate_management_margin" value="<?= $rate_management_margin ?>">
-						</div>
-					
-				
-			</div>
+			
 		<?php
         if($row_id){
 		?>
-			
-			<div class="form-group">
-				
 					
-						<label class="col-sm-2 control-label">Rate Management Type</label>
-						<div class="col-sm-4">
-						
-							<input readonly type="text" class="form-control input-sm" name="" id="" value="<?= $rate_management_type_name ?>">
-						
-						</div>
-					
-				
-			</div>
-			
-				
 			<div style="max-width:100%; width:100%; border: 1px solid #ccc; overflow-x:scroll;">
 			<div class="table-responsive">
 				<table id="tabelbl" class="table table-condensed table-striped table-hover table-bordered" style="width: 3000px !important; ">
@@ -250,7 +226,7 @@
 							<th>Destination</th>
 							<th>Unit</th>
 							<th>Currency</th>
-							<th><?php if($rate_management_type_id == 1){ ?>Buying<?php }else{ ?>Selling<?php } ?></th>
+							<th>Buying</th>
 							<th>Movement</th>
 							<th>Load</th>
 							<th>P/C</th>
@@ -262,11 +238,7 @@
 							<th>Free Dem + Det</th>
 							<th>Min Qty</th>
 							<th>Remark</th>
-							<?php if($rate_management_type_id == 1){ ?>
 							<th class="text-center" style="width:150px">*</th>
-							<?php
-						    }
-							?>
 						</tr>
 					</thead>
 					<tbody>
@@ -289,12 +261,7 @@
 							<th>Sell Price</th>
 							<th>In/Ex</th>
 							<th>Remark</th>
-							<?php if($rate_management_type_id == 1){ ?>
 							<th class="text-center" style="width:150px">*</th>
-							<?php
-
-						    }
-							?>
 						</tr>
 					</thead>
 					<tbody>
@@ -309,11 +276,7 @@
 					<thead>
 						<tr>
 							<th>Notes</th>
-							<?php if($rate_management_type_id == 1){ ?>
 							<th class="text-center" style="width:150px">*</th>
-							 <?php
-							}
-							 ?>
 						</tr>
 					</thead>
 					<tbody>
@@ -363,7 +326,7 @@
 		initiateTabel2();
 		initiateTabel3();
 
-		getDataRatemanagement($("input#i_row_id").val());
+		getDatajobcosting($("input#i_row_id").val());
 		
 		$('.datepicker').datepicker({
 			format: 'yyyy-mm-dd',
@@ -379,7 +342,7 @@
 		
 		
 		
-		$('form#formratemanagement').bootstrapValidator({
+		$('form#formjobcosting').bootstrapValidator({
 			feedbackIcons : {
 				valid : 'glyphicon glyphicon-ok',
 				invalid : 'glyphicon glyphicon-remove',
@@ -387,7 +350,7 @@
 			},
 			
 			fields : {
-				i_rate_management_number : {
+				i_jobcosting_number : {
 					validators : {
 						notEmpty : {
 							message : 'Required - you have to fill this field'
@@ -401,14 +364,14 @@
 						}
 					}
 				},
-				i_rate_management_marketing : {
+				i_jobcosting_marketing : {
 					validators : {
 						notEmpty : {
 							message : 'Required - you have to fill this field'
 						}
 					}
 				},
-				i_rate_management_pic : {
+				i_jobcosting_pic : {
 					validators : {
 						notEmpty : {
 							message : 'Required - you have to fill this field'
@@ -438,14 +401,14 @@
 			$.ajax({
 				type		: "POST",
 				dataType	: 'json',
-				url			: "<?php echo base_url('trs/ratemanagement/commit/'.$row_id) ?>",
+				url			: "<?php echo base_url('trs/jobcosting/commit/'.$row_id) ?>",
 				data		: dataSerialize,
 				error		: function(){
 					alert("AJAX Error");
 				},
 				success		: function(json) {
 					
-					window.location.href = "<?php echo base_url('trs/ratemanagement/form') ?>" + "/" + json;
+					window.location.href = "<?php echo base_url('trs/jobcosting/form') ?>" + "/" + json;
 					
 				},
 				complete	: function(){
@@ -499,7 +462,7 @@
 		$("input#i_costumer_email").val(email);
 	}
 
-	function  getDataRatemanagement(id_ratemanagement){
+	function  getDatajobcosting(id_jobcosting){
 		fillSelectCostumerCode();
 		fillSelectEmployee();
 		fillSelectCostumer();
@@ -511,12 +474,12 @@
 			async		: false,
 			type		: "POST",
 			dataType	: 'json',
-			url			: "<?php echo base_url('trs/ratemanagement/getbydetail') ?>"+"/"+id_ratemanagement,
+			url			: "<?php echo base_url('trs/jobcosting/getbydetail') ?>"+"/"+id_jobcosting,
 			beforeSend	: function(){
 
 			},
 			success		: function(json){
-				$("input#i_row_id").val(json.rate_management_id);
+				$("input#i_row_id").val(json.jobcosting_id);
 				$("input#i_costumer_code").val(json.costumer_code);
 			
 				//$("select#insurance").val(json.insurance); onChangeInsurance(json.insurance);
@@ -536,7 +499,7 @@
 
 	// UNTUK TABEL BILL OF LEADING
 	function initiateTabelBl(){
-		var id_ratemanagement = $("input#i_row_id").val();
+		var id_jobcosting = $("input#i_row_id").val();
 		var no = 0;
 		$("table#tabelbl tbody").empty();
 		
@@ -544,7 +507,7 @@
 			async		: false,
 			type		: "POST",
 			dataType	: 'json',
-			url			: "<?php echo base_url("trs/ratemanagement/getdetailcharge") ?>"+"/"+id_ratemanagement,
+			url			: "<?php echo base_url("trs/jobcosting/getdetailcharge") ?>"+"/"+id_jobcosting,
 			success		: function(json){	
 				var optionCharge = fillSelectCharge();
 				var optionOrigin = fillSelectCity(1);
@@ -584,8 +547,6 @@
 					isiTrow += '<td><input type="text" class="form-control input-sm" name="t_free_dem_det" id="t_free_dem_det" value="'+row.rmrc_free_dem_det+'"></td>';
 					isiTrow += '<td><input type="text" class="form-control input-sm" name="t_min_qty" id="t_min_qty" value="'+row.rmrc_min_qty+'"></td>';
 					isiTrow += '<td><input type="text" class="form-control input-sm" name="t_remark" id="t_remark" value="'+row.rmrc_remark+'"></td>';
-					
-					<?php if($rate_management_type_id == 1){ ?>
 					isiTrow += '<td class="text-center">';
 					//isiTrow += '<button type="button" class="btn btn-xs btn-info" id="btnWdBl" onclick="return onClickWdBl('+no+')" >WD</button> ';
 					isiTrow += '<button style="display:none" type="button" class="btn btn-xs btn-danger" id="btnSaveBl" onclick="return onClickSaveBl('+no+')" >Save</button> ';
@@ -593,9 +554,6 @@
 							isiTrow += '<button type="button" class="btn btn-xs btn-success" id="btnDelBl" onclick="return onClickDelBl('+no+')"> Del </button> ';
 							isiTrow += '<input type="hidden" id="idBl" value="'+no+'" />';
 					isiTrow += '</td>';
-					<?php
-				 }
-					?>
 					isiTrow += '</tr>';
 					
 					$("table#tabelbl tbody").append(isiTrow);
@@ -618,13 +576,8 @@
 		});	
 		
 		var number = no+1;
-		<?php if($rate_management_type_id == 1){ ?>
 		var newRow = generateRowBl(number);
-		
 		$("table#tabelbl tbody").append(newRow);
-		<?php
-		}
-		?>
 	}
 	
 	
@@ -803,7 +756,6 @@
 					isiTrow += '<td><input type="text" class="form-control input-sm" name="t_free_dem_det" id="t_free_dem_det" value=""></td>';
 					isiTrow += '<td><input type="text" class="form-control input-sm" name="t_min_qty" id="t_min_qty" value=""></td>';
 					isiTrow += '<td><input type="text" class="form-control input-sm" name="t_remark" id="t_remark" value=""></td>';
-					
 					isiTrow += '<td class="text-center">';
 		//isiTrow += '<button style="display:none" type="button" class="btn btn-xs btn-info" id="btnWdBl" onclick="return onClickWdBl('+no+')" >WD</button> ';
 		isiTrow += '<button type="button" class="btn btn-xs btn-danger" id="btnSaveBl" onclick="return onClickSaveBl('+no+')" >Save</button> ';
@@ -811,7 +763,6 @@
 		isiTrow += '<button type="button" class="btn btn-xs btn-success" id="btnDelBl" onclick="return onClickDelBl('+no+')"> Del </button> ';
 		isiTrow += '<input type="hidden" id="idBl" />';
 		isiTrow += '</td>';
-		
 		isiTrow += '</tr>';
 		
 		return isiTrow;
@@ -852,7 +803,7 @@
 			async		: false,
 			type		: "POST",
 			dataType	: 'json',
-			url			: "<?php echo base_url('trs/ratemanagement/deletebl') ?>"+"/"+number,
+			url			: "<?php echo base_url('trs/jobcosting/deletebl') ?>"+"/"+number,
 			success		: function(json) {
 					alert(json);
 					
@@ -881,7 +832,7 @@
 			async		: false,
 			type		: "POST",
 			dataType	: 'json',
-			url			: "<?php echo base_url('trs/ratemanagement/deleteie') ?>"+"/"+number,
+			url			: "<?php echo base_url('trs/jobcosting/deleteie') ?>"+"/"+number,
 			success		: function(json) {
 					alert(json);
 					
@@ -908,7 +859,7 @@
 			async		: false,
 			type		: "POST",
 			dataType	: 'json',
-			url			: "<?php echo base_url('trs/ratemanagement/deletenote') ?>"+"/"+number,
+			url			: "<?php echo base_url('trs/jobcosting/deletenote') ?>"+"/"+number,
 			success		: function(json) {
 					alert(json);
 					
@@ -926,7 +877,7 @@
 		var thisButton = tRow.find("button#btnSaveBl");
 		var buttonDetail = tRow.find("button#btnWdBl")
 		
-		var id_ratemanagement = $("input#i_row_id").val();
+		var id_jobcosting = $("input#i_row_id").val();
 		
 		var data_bl = {
 						t_charge: tRow.find("select#t_charge").val(), 
@@ -951,8 +902,8 @@
 		$.ajax({
 			type		: "POST",
 			dataType	: 'json',
-			data		: {id_ratemanagement:id_ratemanagement, object_data: data_bl},
-			url			: "<?php echo base_url('ratemanagement/commitdetail') ?>",
+			data		: {id_jobcosting:id_jobcosting, object_data: data_bl},
+			url			: "<?php echo base_url('jobcosting/commitdetail') ?>",
 			success		: function(json){
 				alert("Data saved");
 				tRow.find("input#idBl").val(json);
@@ -967,7 +918,7 @@
 
 	function onBackForm(){
 
-		window.location.href = "<?php echo base_url('trs/ratemanagement') ?>";
+		window.location.href = "<?php echo base_url('trs/jobcosting') ?>";
 
 	}
 
@@ -1054,7 +1005,7 @@
 	// UNTUK TABEL REQUEST DOCUMENT	
 	
 	function initiateTabel2(){
-		var id_ratemanagement = $("input#i_row_id").val();
+		var id_jobcosting = $("input#i_row_id").val();
 		var no = 0;
 		$("table#tabel2 tbody").empty();
 		
@@ -1062,7 +1013,7 @@
 			async		: false,
 			type		: "POST",
 			dataType	: 'json',
-			url			: "<?php echo base_url("trs/ratemanagement/getdetailie") ?>"+"/"+id_ratemanagement,
+			url			: "<?php echo base_url("trs/jobcosting/getdetailie") ?>"+"/"+id_jobcosting,
 			success		: function(json){	
 				var optionCharge = fillSelectCharge();
 				var optionUnit = fillSelectUnit();
@@ -1079,7 +1030,6 @@
 					isiTrow += '<td><input type="text" class="form-control input-sm" name="t2_sell_price" id="t2_sell_price" value="'+row.rmrie_sell_price+'"></td>';
 					isiTrow += '<td><input type="text" class="form-control input-sm" name="t2_in_ex" id="t2_in_ex" value="'+row.rmrie_type+'"></td>';
 					isiTrow += '<td><input type="text" class="form-control input-sm" name="t2_remark" id="t2_remark" value="'+row.rmrie_remark+'"></td>';
-					<?php if($rate_management_type_id == 1){ ?>
 					isiTrow += '<td class="text-center">';
 					//isiTrow += '<button type="button" class="btn btn-xs btn-info" id="btnWdRequest" onclick="return onClickWdRequest('+no+')" >WD</button> ';
 					isiTrow += '<button style="display:none" type="button" class="btn btn-xs btn-danger" id="btnSaveIE" onclick="return onClickSaveIE('+no+')" >Save</button> ';
@@ -1087,9 +1037,6 @@
 					isiTrow += '<button type="button" class="btn btn-xs btn-success" id="btnDelIE" onclick="return onClickDelIE('+no+')"> Del </button> ';
 					isiTrow += '<input type="hidden" id="idIE" value="'+no+'" />';
 					isiTrow += '</td>';
-					<?php
-					}
-					?>
 					isiTrow += '</tr>';
 					
 					$("table#tabel2 tbody").append(isiTrow);
@@ -1104,18 +1051,14 @@
 			//	alert("error");
 			//}
 		});	
-		
-		<?php if($rate_management_type_id == 1){ ?>
+	
 		var number = no+1;
 		var newRow = generateRow2(number);
 		$("table#tabel2 tbody").append(newRow);
-		<?php
-		}
-		?>
 	}
 
 	function initiateTabel3(){
-		var id_ratemanagement = $("input#i_row_id").val();
+		var id_jobcosting = $("input#i_row_id").val();
 		var no = 0;
 		$("table#tabel3 tbody").empty();
 		
@@ -1123,7 +1066,7 @@
 			async		: false,
 			type		: "POST",
 			dataType	: 'json',
-			url			: "<?php echo base_url("trs/ratemanagement/getdetailnote") ?>"+"/"+id_ratemanagement,
+			url			: "<?php echo base_url("trs/jobcosting/getdetailnote") ?>"+"/"+id_jobcosting,
 			success		: function(json){	
 				
 				$.each(json, function(index, row) {
@@ -1132,7 +1075,6 @@
 					
 					isiTrow = '<tr id="'+no+'">';
 					isiTrow += '<td><input type="text" class="form-control input-sm" name="t3_note" id="t3_note" value="'+row.rmn_note+'"></td>';
-					<?php if($rate_management_type_id == 1){ ?>
 					isiTrow += '<td class="text-center">';
 					//isiTrow += '<button style="display:none" type="button" class="btn btn-xs btn-info" id="btnWdRequest" onclick="return onClickWdRequest('+no+')" >WD</button> ';
 					isiTrow += '<button type="button" style="display:none"  class="btn btn-xs btn-danger" id="btnSaveNote" onclick="return onClickSaveNote('+no+')" >Save</button> ';
@@ -1140,9 +1082,6 @@
 					isiTrow += '<button type="button" class="btn btn-xs btn-success" id="btnDelNote" onclick="return onClickDelNote('+no+')"> Del </button> ';
 					isiTrow += '<input type="hidden" id="idNote" />';
 					isiTrow += '</td>';
-					<?php
-					}
-					?>
 					isiTrow += '</tr>';
 					
 					$("table#tabel3 tbody").append(isiTrow);
@@ -1154,13 +1093,10 @@
 			//	alert("error");
 			//}
 		});	
-		<?php if($rate_management_type_id == 1){ ?>
+	
 		var number = no+1;
 		var newRow = generateRow3(number);
 		$("table#tabel3 tbody").append(newRow);
-		<?php
-	}
-		?>
 	}
 	
 	function fillSelectDocument(){
@@ -1253,7 +1189,7 @@
 		var thisButton = tRow.find("button#btnSaveIE");
 		var buttonDetail = tRow.find("button#btnWdIE")
 		
-		var id_ratemanagement = $("input#i_row_id").val();
+		var id_jobcosting = $("input#i_row_id").val();
 		
 		var data_ie = 	{
 								t2_charge: tRow.find("select#t2_charge").val(), 
@@ -1267,10 +1203,9 @@
 		$.ajax({
 			type		: "POST",
 			dataType	: 'json',
-			data		: {id_ratemanagement:id_ratemanagement, object_data: data_ie},
-			url			: "<?php echo base_url('ratemanagement/commitie') ?>",
+			data		: {id_jobcosting:id_jobcosting, object_data: data_ie},
+			url			: "<?php echo base_url('jobcosting/commitie') ?>",
 			success		: function(json){
-				alert("Data saved");
 				tRow.find("input#idIE").val(json);
 				buttonDetail.show();
 				thisButton.hide();
@@ -1287,7 +1222,7 @@
 		var thisButton = tRow.find("button#btnSaveNote");
 		var buttonDetail = tRow.find("button#btnWdNote")
 		
-		var id_ratemanagement = $("input#i_row_id").val();
+		var id_jobcosting = $("input#i_row_id").val();
 		
 		var data_note = 	{
 								t3_note: tRow.find("input#t3_note").val()
@@ -1296,10 +1231,9 @@
 		$.ajax({
 			type		: "POST",
 			dataType	: 'json',
-			data		: {id_ratemanagement:id_ratemanagement, object_data: data_note},
-			url			: "<?php echo base_url('ratemanagement/commitnote') ?>",
+			data		: {id_jobcosting:id_jobcosting, object_data: data_note},
+			url			: "<?php echo base_url('jobcosting/commitnote') ?>",
 			success		: function(json){
-				alert("Data saved");
 				tRow.find("input#idNote").val(json);
 				buttonDetail.show();
 				thisButton.hide();
@@ -1430,7 +1364,7 @@
 			async		: false,
 			type		: "POST",
 			dataType	: 'json',
-			url			: "<?php echo base_url("ratemanagement/getmarketing") ?>",
+			url			: "<?php echo base_url("jobcosting/getmarketing") ?>",
 			success		: function(json){
 				$("select#i_service_marketing_id").empty().append("<option>Loading Data ...</option>");
 			
@@ -1460,7 +1394,7 @@
 			async		: false,
 			type		: "POST",
 			dataType	: 'json',
-			url			: "<?php echo base_url("ratemanagement/getagent") ?>",
+			url			: "<?php echo base_url("jobcosting/getagent") ?>",
 			success		: function(json){
 				$("select#i_service_agent_id").empty().append("<option>Loading Data ...</option>");
 			

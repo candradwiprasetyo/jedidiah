@@ -1,5 +1,5 @@
 <?php
-class Trs_ratemanagement extends CI_Model {
+class Jobcosting_model extends CI_Model {
 
 	public function __construct()
 	{
@@ -7,11 +7,9 @@ class Trs_ratemanagement extends CI_Model {
 	}
 	
 	public function getall(){
-		$this->db->select('a.*, b.costumer_name, c.rate_management_type_name');
+		$this->db->select('a.*, b.costumer_name');
 		$this->db->from('trs_rate_managements a');
 		$this->db->join('mst_costumer b', 'b.costumer_code = a.costumer_code');
-		$this->db->join('trs_rate_management_types c', 'c.rate_management_type_id = a.rate_management_type_id');
-		$this->db->order_by('a.rate_management_id');
 		$query = $this->db->get();
 	
 		return $query->result_array();
@@ -49,8 +47,7 @@ class Trs_ratemanagement extends CI_Model {
 		$service_moving_type = $this->input->post('i_service_moving_type');
 		$service_mode_transport = $this->input->post('i_service_mode_transport');
 		$product_type = $this->input->post('i_product_type');
-		$rate_management_margin = $this->input->post('i_rate_management_margin');
-		$rate_management_type_id = 1;
+
 
 		$data = array(
 			'rate_management_number' => $rate_management_number,
@@ -64,20 +61,12 @@ class Trs_ratemanagement extends CI_Model {
 			'service_agent_id' => $service_agent_id,
 			'service_moving_type' => $service_moving_type,
 			'service_mode_transport' => $service_mode_transport,
-			'product_type' => $product_type,
-			'rate_management_margin' => $rate_management_margin,
-			'rate_management_type_id' => $rate_management_type_id
+			'product_type' => $product_type
 		);
 		
-		// input type buying_rate
+
 		$this->db->insert('trs_rate_managements', $data);
 		$last_insert = $this->db->insert_id();
-
-		// input type buying_rate
-		$data['rate_management_type_id'] = 2;
-		$data['rate_management_parent_id'] = $last_insert;
-		$this->db->insert('trs_rate_managements', $data);
-
 		//$this->db->insert('trs_job_order_documentation', array('job_order_id' => $last_insert));
 		
 		return $last_insert;
@@ -124,10 +113,6 @@ class Trs_ratemanagement extends CI_Model {
 
 
 	public function deletebl($id){
-		// delete selling
-		$child_id = $this->get_rmrc_id($id);
-		$this->db->delete('trs_rate_management_rate_charges', array('rmrc_id' => $child_id)); 
-
 		$result = $this->db->delete('trs_rate_management_rate_charges', array('rmrc_id' => $id)); 
 		if($result){
 			return true;
@@ -138,11 +123,6 @@ class Trs_ratemanagement extends CI_Model {
 	}
 
 	public function deleteie($id){
-
-		// delete selling
-		$child_id = $this->get_rmrie_id($id);
-		$this->db->delete('trs_rate_management_rate_inc_exc', array('rmrie_id' => $child_id)); 
-
 		$result = $this->db->delete('trs_rate_management_rate_inc_exc', array('rmrie_id' => $id)); 
 		if($result){
 			return true;
@@ -153,11 +133,6 @@ class Trs_ratemanagement extends CI_Model {
 	}
 
 	public function deletenote($id){
-
-		// delete selling
-		$child_id = $this->get_rmn_id($id);
-		$this->db->delete('trs_rate_management_notes', array('rmn_id' => $child_id)); 
-
 		$result = $this->db->delete('trs_rate_management_notes', array('rmn_id' => $id)); 
 		if($result){
 			return true;
@@ -168,9 +143,8 @@ class Trs_ratemanagement extends CI_Model {
 	}
 
 	function read_id($id){
-		$this->db->select('a.*, b.costumer_name, b.main_address, b.costumer_email, b.main_phone, c.rate_management_type_name', 1);
+		$this->db->select('a.*, b.costumer_name, b.main_address, b.costumer_email, b.main_phone', 1);
 		$this->db->join('mst_costumer b', 'b.costumer_code = a.costumer_code');
-		$this->db->join('trs_rate_management_types c', 'c.rate_management_type_id = a.rate_management_type_id');
 		$this->db->where('a.rate_management_id', $id);
 		$query = $this->db->get('trs_rate_managements a', 1);
 		$result = null;
@@ -214,10 +188,7 @@ class Trs_ratemanagement extends CI_Model {
 	public function commitdetail(){
 			$id_ratemanagement = $this->input->post('id_ratemanagement');
 			$data = $this->input->post('object_data');
-			$margin = $this->get_margin($id_ratemanagement);
-
-			$margin_value = $margin * $data['t_buying'] / 100;
-			$selling = $data['t_buying'] + $margin_value;
+			
 			
 			$data = array(
 				'rate_management_id' => $id_ratemanagement,
@@ -240,15 +211,9 @@ class Trs_ratemanagement extends CI_Model {
 				'rmrc_remark' => $data['t_remark']
 			);
 			
-			// input buying
+			
 			$this->db->insert('trs_rate_management_rate_charges', $data);
 			$last_insert = $this->db->insert_id();
-
-			// input selling
-			$data['rmrc_buying'] = $selling;
-			$data['parent_id'] = $last_insert;
-			$data['rate_management_id'] = $this->get_rate_management_id($id_ratemanagement);
-			$this->db->insert('trs_rate_management_rate_charges', $data);
 			
 			return $last_insert;
 			
@@ -272,12 +237,6 @@ class Trs_ratemanagement extends CI_Model {
 			
 			$this->db->insert('trs_rate_management_rate_inc_exc', $data);
 			$last_insert = $this->db->insert_id();
-
-			// input selling
-			
-			$data['parent_id'] = $last_insert;
-			$data['rate_management_id'] = $this->get_rate_management_id($id_ratemanagement);
-			$this->db->insert('trs_rate_management_rate_inc_exc', $data);
 			
 			return $last_insert;
 			
@@ -296,12 +255,6 @@ class Trs_ratemanagement extends CI_Model {
 			
 			$this->db->insert('trs_rate_management_notes', $data);
 			$last_insert = $this->db->insert_id();
-
-			// input selling
-			
-			$data['parent_id'] = $last_insert;
-			$data['rate_management_id'] = $this->get_rate_management_id($id_ratemanagement);
-			$this->db->insert('trs_rate_management_notes', $data);
 			
 			return $last_insert;
 			
@@ -352,15 +305,7 @@ class Trs_ratemanagement extends CI_Model {
 	}
 
 	public function delete($ID){
-
-		// delete selling
-		$child_id = $this->get_rate_management_id($ID);
-		$this->db->delete('trs_rate_management_notes', array('rate_management_id' => $child_id)); 
-		$this->db->delete('trs_rate_management_rate_charges', array('rate_management_id' => $child_id)); 
-		$this->db->delete('trs_rate_management_rate_inc_exc', array('rate_management_id' => $child_id)); 
-		$this->db->delete('trs_rate_managements', array('rate_management_id' => $child_id)); 
 		
-		// delete buyinh
 		$this->db->delete('trs_rate_management_notes', array('rate_management_id' => $ID)); 
 		$this->db->delete('trs_rate_management_rate_charges', array('rate_management_id' => $ID)); 
 		$this->db->delete('trs_rate_management_rate_inc_exc', array('rate_management_id' => $ID)); 
@@ -371,71 +316,6 @@ class Trs_ratemanagement extends CI_Model {
 		else{
 			return false;
 		}
-	}
-
-	function get_rate_management_id($id)
-	{
-		$sql = "select rate_management_id as result from trs_rate_managements where rate_management_parent_id = '$id'
-				";
-		
-		$query = $this->db->query($sql);
-		
-		$result = null;
-		foreach ($query->result_array() as $row) $result = ($row);
-		
-		return $result['result'];
-	}
-
-	function get_margin($id)
-	{
-		$sql = "select rate_management_margin as result from trs_rate_managements where rate_management_parent_id = '$id'
-				";
-		
-		$query = $this->db->query($sql);
-		
-		$result = null;
-		foreach ($query->result_array() as $row) $result = ($row);
-		
-		return $result['result'];
-	}
-
-	function get_rmrc_id($id)
-	{
-		$sql = "select rmrc_id as result from trs_rate_management_rate_charges where parent_id = '$id'
-				";
-		
-		$query = $this->db->query($sql);
-		
-		$result = null;
-		foreach ($query->result_array() as $row) $result = ($row);
-		
-		return $result['result'];
-	}
-
-	function get_rmrie_id($id)
-	{
-		$sql = "select rmrie_id as result from trs_rate_management_rate_inc_exc where parent_id = '$id'
-				";
-		
-		$query = $this->db->query($sql);
-		
-		$result = null;
-		foreach ($query->result_array() as $row) $result = ($row);
-		
-		return $result['result'];
-	}
-
-	function get_rmn_id($id)
-	{
-		$sql = "select rmn_id as result from trs_rate_management_notes where parent_id = '$id'
-				";
-		
-		$query = $this->db->query($sql);
-		
-		$result = null;
-		foreach ($query->result_array() as $row) $result = ($row);
-		
-		return $result['result'];
 	}
 	
 	
