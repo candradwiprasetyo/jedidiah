@@ -7,11 +7,13 @@ class Trs_jobcosting_model extends CI_Model {
 	}
 	
 	public function getall(){
-		$this->db->select('a.*, b.costumer_name, c.rate_management_type_name');
-		$this->db->from('trs_rate_managements a');
+		$this->db->select('a.*, b.costumer_name, c.jc_status_name, d.jc_transport_type_name, e.booking_no');
+		$this->db->from('trs_job_costing a');
 		$this->db->join('mst_costumer b', 'b.costumer_code = a.costumer_code');
-		$this->db->join('trs_rate_management_types c', 'c.rate_management_type_id = a.rate_management_type_id');
-		$this->db->order_by('a.rate_management_id');
+		$this->db->join('trs_job_costing_transport_type d', 'd.jc_transport_type_id = a.jc_transport_type_id');
+		$this->db->join('trs_job_costing_status c', 'c.jc_status_id = a.jc_status_id');
+		$this->db->join('trs_job_order e', 'e.job_order_id = a.job_order_id');
+		$this->db->order_by('a.jc_id');
 		$query = $this->db->get();
 	
 		return $query->result_array();
@@ -37,89 +39,94 @@ class Trs_jobcosting_model extends CI_Model {
 	}
 	
 	public function commit(){	
-		$rate_management_number = $this->input->post('i_rate_management_number'); 
-		$rate_management_date = $this->input->post('i_rate_management_date');
-		$costumer_code = $this->input->post('i_costumer_code');
-		$rate_management_valid_date = $this->input->post('i_rate_management_valid_date');
-		$rate_management_marketing = $this->input->post('i_rate_management_marketing');
-		$rate_management_pic = $this->input->post('i_rate_management_pic');
-		$service_shipment_status = $this->input->post('i_service_shipment_status');
-		$service_marketing_id = $this->input->post('i_service_marketing_id');
-		$service_agent_id = $this->input->post('i_service_agent_id');
-		$service_moving_type = $this->input->post('i_service_moving_type');
-		$service_mode_transport = $this->input->post('i_service_mode_transport');
-		$product_type = $this->input->post('i_product_type');
-		$rate_management_margin = $this->input->post('i_rate_management_margin');
-		$rate_management_type_id = 1;
+		$jc_booking = $this->input->post('i_jc_booking');
+		$job_order_id = $this->input->post('i_job_order_id'); 
 
+
+		$jc_closing_date = $this->input->post('i_jc_closing_date');
+		$costumer_code = $this->input->post('i_costumer_code');
+		$jc_transport_type_id = $this->input->post('i_jc_transport_type_id');
+		$jc_eid = $this->input->post('i_jc_eid');
+		$jc_party = $this->input->post('i_jc_party');
+		$jc_routing = $this->input->post('i_jc_routing');
+		$jc_etd = $this->input->post('i_jc_etd');
+		$jc_eta = $this->input->post('i_jc_eta');
+		$jc_status_id = $this->input->post('i_jc_status_id');
+		$jc_usd_rate = $this->input->post('i_jc_usd_rate');
+		$jc_category_id = $this->input->post('i_jc_category_id');
+
+		
 		$data = array(
-			'rate_management_number' => $rate_management_number,
-			'rate_management_date' => $this->format_back_date($rate_management_date),
+			'job_order_id' => $job_order_id,
+			'jc_booking' => $jc_booking,
+			'jc_closing_date' => $this->format_back_date($jc_closing_date),
 			'costumer_code' => $costumer_code,
-			'rate_management_valid_date' => $this->format_back_date($rate_management_valid_date),
-			'rate_management_marketing' => $rate_management_marketing,
-			'rate_management_pic' => $rate_management_pic,
-			'service_shipment_status' => $service_shipment_status,
-			'service_marketing_id' => $service_marketing_id,
-			'service_agent_id' => $service_agent_id,
-			'service_moving_type' => $service_moving_type,
-			'service_mode_transport' => $service_mode_transport,
-			'product_type' => $product_type,
-			'rate_management_margin' => $rate_management_margin,
-			'rate_management_type_id' => $rate_management_type_id
+			'jc_transport_type_id' => $jc_transport_type_id,
+			'jc_eid' => $jc_eid,
+			'jc_party' => $jc_party,
+			'jc_routing' => $jc_routing,
+			'jc_etd' => $jc_etd,
+			'jc_eta' => $jc_eta,
+			'jc_status_id' => $jc_status_id,
+			'jc_usd_rate' => $jc_usd_rate,
+			'jc_category_id' => $jc_category_id
 		);
 		
 		// input type buying_rate
-		$this->db->insert('trs_rate_managements', $data);
+		$this->db->insert('trs_job_costing', $data);
 		$last_insert = $this->db->insert_id();
 
 		// input type buying_rate
-		$data['rate_management_type_id'] = 2;
-		$data['rate_management_parent_id'] = $last_insert;
-		$this->db->insert('trs_rate_managements', $data);
+		//$data['rate_management_type_id'] = 2;
+		//$data['rate_management_parent_id'] = $last_insert;
+		//$this->db->insert('trs_rate_managements', $data);
 
 		//$this->db->insert('trs_job_order_documentation', array('job_order_id' => $last_insert));
 		
 		return $last_insert;
+		
 	}
 
 
 	public function update($id){	
-		$rate_management_number = $this->input->post('i_rate_management_number'); 
-		$rate_management_date = $this->input->post('i_rate_management_date');
+		$job_order_id = $this->input->post('i_job_order_id'); 
+		$jc_booking = $this->input->post('i_jc_booking'); 
+		$jc_closing_date = $this->input->post('i_jc_closing_date');
 		$costumer_code = $this->input->post('i_costumer_code');
-		$rate_management_valid_date = $this->input->post('i_rate_management_valid_date');
-		$rate_management_marketing = $this->input->post('i_rate_management_marketing');
-		$rate_management_pic = $this->input->post('i_rate_management_pic');
-		$service_shipment_status = $this->input->post('i_service_shipment_status');
-		$service_marketing_id = $this->input->post('i_service_marketing_id');
-		$service_agent_id = $this->input->post('i_service_agent_id');
-		$service_moving_type = $this->input->post('i_service_moving_type');
-		$service_mode_transport = $this->input->post('i_service_mode_transport');
-		$product_type = $this->input->post('i_product_type');
+		$jc_transport_type_id = $this->input->post('i_jc_transport_type_id');
+		$jc_eid = $this->input->post('i_jc_eid');
+		$jc_party = $this->input->post('i_jc_party');
+		$jc_routing = $this->input->post('i_jc_routing');
+		$jc_etd = $this->input->post('i_jc_etd');
+		$jc_eta = $this->input->post('i_jc_eta');
+		$jc_status_id = $this->input->post('i_jc_status_id');
+		$jc_usd_rate = $this->input->post('i_jc_usd_rate');
+		$jc_category_id = $this->input->post('i_jc_category_id');
 
-
+		
 		$data = array(
-			'rate_management_number' => $rate_management_number,
-			'rate_management_date' => $this->format_back_date($rate_management_date),
+			'job_order_id' => $job_order_id,
+			'jc_booking' => $jc_booking,
+			'jc_closing_date' => $this->format_back_date($jc_closing_date),
 			'costumer_code' => $costumer_code,
-			'rate_management_valid_date' => $this->format_back_date($rate_management_valid_date),
-			'rate_management_marketing' => $rate_management_marketing,
-			'rate_management_pic' => $rate_management_pic,
-			'service_shipment_status' => $service_shipment_status,
-			'service_marketing_id' => $service_marketing_id,
-			'service_agent_id' => $service_agent_id,
-			'service_moving_type' => $service_moving_type,
-			'service_mode_transport' => $service_mode_transport,
-			'product_type' => $product_type
+			'jc_transport_type_id' => $jc_transport_type_id,
+			'jc_eid' => $jc_eid,
+			'jc_party' => $jc_party,
+			'jc_routing' => $jc_routing,
+			'jc_etd' => $jc_etd,
+			'jc_eta' => $jc_eta,
+			'jc_status_id' => $jc_status_id,
+			'jc_usd_rate' => $jc_usd_rate,
+			'jc_category_id' => $jc_category_id
 		);
 		
 
-		$this->db->where('rate_management_id', $id);
-		$this->db->update('trs_rate_managements', $data); 
+		$this->db->where('jc_id', $id);
+		$this->db->update('trs_job_costing', $data); 
 		//$this->db->insert('trs_job_order_documentation', array('job_order_id' => $last_insert));
 		
 		return $id;
+		
 	}
 
 
@@ -168,11 +175,12 @@ class Trs_jobcosting_model extends CI_Model {
 	}
 
 	function read_id($id){
-		$this->db->select('a.*, b.costumer_name, b.main_address, b.costumer_email, b.main_phone, c.rate_management_type_name', 1);
+		$this->db->select('a.*, b.costumer_name, c.jc_status_name, d.jc_transport_type_name');
 		$this->db->join('mst_costumer b', 'b.costumer_code = a.costumer_code');
-		$this->db->join('trs_rate_management_types c', 'c.rate_management_type_id = a.rate_management_type_id');
-		$this->db->where('a.rate_management_id', $id);
-		$query = $this->db->get('trs_rate_managements a', 1);
+		$this->db->join('trs_job_costing_transport_type d', 'd.jc_transport_type_id = a.jc_transport_type_id');
+		$this->db->join('trs_job_costing_status c', 'c.jc_status_id = a.jc_status_id');
+		$this->db->where('a.jc_id', $id);
+		$query = $this->db->get('trs_job_costing a', 1);
 		$result = null;
 		foreach($query->result_array() as $row)
 		{
@@ -202,7 +210,7 @@ class Trs_jobcosting_model extends CI_Model {
 	function format_date($date)
 	{
 		$date = explode("-", $date);
-		return $date[2]."/".$date[1]."/".$date[0];
+		return $date[1]."/".$date[2]."/".$date[0];
 	}
 
 	function format_back_date($date)
@@ -212,45 +220,81 @@ class Trs_jobcosting_model extends CI_Model {
 	}
 	
 	public function commitdetail(){
-			$id_ratemanagement = $this->input->post('id_ratemanagement');
-			$data = $this->input->post('object_data');
-			$margin = $this->get_margin($id_ratemanagement);
 
-			$margin_value = $margin * $data['t_buying'] / 100;
-			$selling = $data['t_buying'] + $margin_value;
+
+			$jc_id = $this->input->post('jc_id');
+			$data = $this->input->post('object_data');
+			
+			//print_r($data);
 			
 			$data = array(
-				'rate_management_id' => $id_ratemanagement,
-				'rmrc_charge_name' => $data['t_charge'],
-				'rmrc_origin' => $data['t_origin'],	
-				'rmrc_destination' => $data['t_destionation'],
-				'rmrc_unit' => $data['t_unit'],
-				'rmrc_currency' => $data['t_currency'],
-				'rmrc_buying' => $data['t_buying'],
-				'rmrc_movement' => $data['t_movement'],
-				'rmrc_load' => $data['t_load'],
-				'rmrc_pc' => $data['t_pc'],
-				'rmrc_cargo_type' => $data['t_cargo'],
-				'rmrc_transshipment' => $data['t_transshipment'],
-				'rmrc_t_time' => $data['t_time'],
-				'rmrc_free_det' => $data['t_free_det'],
-				'rmrc_free_dem' => $data['t_free_dem'],
-				'rmrc_free_dem_det' => $data['t_free_dem_det'],
-				'rmrc_min_qty' => $data['t_min_qty'],
-				'rmrc_remark' => $data['t_remark']
+				'jc_id' => $jc_id,
+				'rmrc_id' => $data['t_rmrc_id'],
+				'jcd_description' => $data['t_description'],	
+				'jcd_partner_type' => $data['t_partner_type'],
+				'jcd_partner_name' => $data['t_partner_name'],
+				'jcd_unit' => $data['t_unit'],
+				'currency_code' => $data['t_currency_code'],
+				'jcd_rate' => $data['t_rate'],
+				'jcd_jc_qty' => $data['t_jc_qty'],
+				'jcd_jc_price' => $data['t_jc_price'],
+				'jcd_jc_subtotal' => $data['t_jc_subtotal'],
+				'jcd_rei' => $data['t_rei'],
+				'jcd_pc' => $data['t_pc'],
+				'jcd_due_date' => $this->format_back_date($data['t_due_date']),
+				'jcd_status_id' => $data['t_status_id'],
+				'jcd_qty' => $data['t_qty'],
+				'jcd_aqty' => $data['t_aqty']
 			);
 			
-			// input buying
-			$this->db->insert('trs_rate_management_rate_charges', $data);
+			
+			$this->db->insert('trs_job_costing_detail', $data);
 			$last_insert = $this->db->insert_id();
 
-			// input selling
-			$data['rmrc_buying'] = $selling;
-			$data['parent_id'] = $last_insert;
-			$data['rate_management_id'] = $this->get_rate_management_id($id_ratemanagement);
-			$this->db->insert('trs_rate_management_rate_charges', $data);
+			
 			
 			return $last_insert;
+			
+			
+			
+	}
+
+	public function editdetail(){
+
+
+			$detail_id = $this->input->post('detail_id');
+			$data = $this->input->post('object_data');
+			
+			
+			$data = array(
+				
+				'rmrc_id' => $data['t_rmrc_id'],
+				'jcd_description' => $data['t_description'],	
+				'jcd_partner_type' => $data['t_partner_type'],
+				'jcd_partner_name' => $data['t_partner_name'],
+				'jcd_unit' => $data['t_unit'],
+				'currency_code' => $data['t_currency_code'],
+				'jcd_rate' => $data['t_rate'],
+				'jcd_jc_qty' => $data['t_jc_qty'],
+				'jcd_jc_price' => $data['t_jc_price'],
+				'jcd_jc_subtotal' => $data['t_jc_subtotal'],
+				'jcd_rei' => $data['t_rei'],
+				'jcd_pc' => $data['t_pc'],
+				'jcd_due_date' => $this->format_back_date($data['t_due_date']),
+				'jcd_status_id' => $data['t_status_id'],
+				'jcd_qty' => $data['t_qty'],
+				'jcd_aqty' => $data['t_aqty']
+			);
+			
+			
+			$this->db->where('jcd_id', $detail_id);
+			$this->db->update('trs_job_costing_detail', $data); 
+
+			
+			
+			//return $last_insert;
+			
+			
 			
 	}
 	
@@ -321,8 +365,8 @@ class Trs_jobcosting_model extends CI_Model {
 	public function getdetailcharge($id){
 		
 			$this->db->select('*');
-			$this->db->from('trs_rate_management_rate_charges');
-			$this->db->where('rate_management_id', $id);
+			$this->db->from('trs_job_costing_detail');
+			$this->db->where('jc_id', $id);
 			
 			$query = $this->db->get();
 			$str =  $this->db->last_query();
@@ -436,6 +480,35 @@ class Trs_jobcosting_model extends CI_Model {
 		foreach ($query->result_array() as $row) $result = ($row);
 		
 		return $result['result'];
+	}
+
+
+	public function getalljoborder()
+	{
+		$this->db->select('a.*, b.costumer_name');
+		$this->db->from('trs_job_order a');
+		$this->db->join('mst_costumer b', 'b.costumer_code = a.costumer_code');
+		$query = $this->db->get();
+		return $query->result_array();
+	}
+	
+	public function getallrmrc()
+	{
+		$this->db->select('a.*, b.charge_name, c.rate_management_number');
+		$this->db->from('trs_rate_management_rate_charges a');
+		$this->db->join('mst_charge b', 'b.charge_code = a.rmrc_charge_name');
+		$this->db->join('trs_rate_managements c', 'c.rate_management_id = a.rate_management_id');
+		$this->db->where('c.rate_management_type_id', 2);
+		$query = $this->db->get();
+		return $query->result_array();
+	}
+
+	public function getalldetailstatus()
+	{
+		$this->db->select('a.*');
+		$this->db->from('trs_job_costing_detail_status a');
+		$query = $this->db->get();
+		return $query->result_array();
 	}
 	
 	

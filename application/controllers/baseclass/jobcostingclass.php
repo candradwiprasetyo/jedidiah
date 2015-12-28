@@ -47,7 +47,13 @@ class Jobcostingclass extends CI_Controller {
 	}
 	
 	public function commitdetail(){
+		
 		$temp = $this->trs_jobcosting_model->commitdetail();
+		echo json_encode($temp);
+	}
+
+	public function editdetail(){
+		$temp = $this->trs_jobcosting_model->editdetail();
 		echo json_encode($temp);
 	}
 	

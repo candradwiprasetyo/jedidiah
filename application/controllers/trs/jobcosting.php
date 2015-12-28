@@ -31,41 +31,36 @@ class Jobcosting extends CI_Controller {
 		$data = array();
 		if($id==0){
 
-			$get_counter = $this->jobcosting->get_counter();
-
+			
 			$data['row_id']						= '';
-			$data['rate_management_number']		= $get_counter;
-			$data['rate_management_date']		= date("m/d/Y");
-			$data['rate_management_valid_date']		= date("m/d/Y");
+			$data['job_order_id']				= '';
+			$data['jc_booking']					= '';
+			$data['jc_closing_date']			= date("m/d/Y");
 			$data['costumer_code']				= '';
-			$data['costumer_name']				= '';
-			$data['main_address']				= '';
-			$data['main_phone']					= '';
-			$data['costumer_email']				= '';
-			$data['rate_management_marketing']	= '';
-			$data['rate_management_pic']		= '';
-			$data['service_marketing_id']		= '';
-			$data['service_agent_id']			= '';
-			$data['service_shipment_status']	= '1';
-			$data['service_moving_type']		= '1';
-			$data['service_mode_transport']		= '1';
-			$data['product_type']				= '1';
+			$data['jc_transport_type_id']		= '';
+			$data['jc_eid']						= '';	
+			$data['jc_party']					= '';
+			$data['jc_routing']					= '';
+			$data['jc_etd']						= '';
+			$data['jc_eta']						= '';
+			$data['jc_status_id']				= '2';
+			$data['jc_usd_rate']				= '';
+			$data['jc_category_id']				= '1';
 
 		}else{
-			$result = $this->jobcosting->read_id($id);
+			$result = $this->trs_jobcosting_model->read_id($id);
 			if($result){
 				$data = $result;
 				$data['row_id'] = $id;
-				$data['rate_management_date'] = $this->jobcosting->format_date($data['rate_management_date']);
-				$data['rate_management_valid_date'] = $this->jobcosting->format_date($data['rate_management_valid_date']);
-			}
+				$data['jc_closing_date'] = $this->trs_jobcosting_model->format_date($data['jc_closing_date']);
+				}
 		}
 
-		$datahead['title'] = "FORM RATE MANAGEMENT";
+		$datahead['title'] = "FORM JOB COSTING";
 		$datanav['activenav'] = "transaction";
 		$dataside['activesidebar'] = "jobcosting";
 		$databread['breadcumb'] = '<li><a href="">Transaction</a></li>';
-		$databread['breadcumb'] .= '<li><i class="fa fa-angle-right"></i><a href="">Rate Management</a></li>';
+		$databread['breadcumb'] .= '<li><i class="fa fa-angle-right"></i><a href="">Job Costing</a></li>';
 		$databread['breadcumb'] .= '<li><i class="fa fa-angle-right"></i><a href="">Form</a></li>';
 		
 		
@@ -78,15 +73,13 @@ class Jobcosting extends CI_Controller {
 		$this->load->view('template/footer.php');	
 	}	
 
-	public function commit(){
-
-		$id = $this->input->post('row_id');
+	public function commit($id=0){
 
 		if(empty($id)){			
-			$temp = $this->jobcosting->commit();
+			$temp = $this->trs_jobcosting_model->commit();
 			echo json_encode($temp);
 		}else{
-			$temp = $this->jobcosting->update($id);
+			$temp = $this->trs_jobcosting_model->update($id);
 			echo json_encode($temp);
 		}
 		
@@ -100,7 +93,9 @@ class Jobcosting extends CI_Controller {
 
 	public function getdetailcharge($id){
 		
-			$data = $this->jobcosting->getdetailcharge($id);
+			$data = $this->trs_jobcosting_model->getdetailcharge($id);
+
+			//$data['jcd_due_date'] = $this->trs_jobcosting_model->format_date($data['jcd_due_date']);
 			echo json_encode($data);
 	}
 
@@ -152,7 +147,27 @@ class Jobcosting extends CI_Controller {
 			echo json_encode(false);
 		}
 	}
+
 	
+	public function getallrmrc()
+	{
+		$data = $this->trs_jobcosting_model->getallrmrc();
+		echo json_encode($data);
+	}
+
+
+
+	public function getalldetailstatus()
+	{
+		$data = $this->trs_jobcosting_model->getalldetailstatus();
+		echo json_encode($data);
+	}
+	
+	public function getalljoborder()
+	{
+		$data = $this->trs_jobcosting_model->getalljoborder();
+		echo json_encode($data);
+	}
 	
 }
 

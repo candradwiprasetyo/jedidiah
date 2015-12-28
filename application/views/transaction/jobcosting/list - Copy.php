@@ -120,7 +120,7 @@ function listjobcosting(){
 				data: json,
 				columns: [
 					
-					{ data: 'booking_no' },
+					{ data: 'jc_id' },
 					{ data: 'jc_closing_date' },
 					{ data: 'costumer_name' },
 					{ data: 'jc_transport_type_name' },
@@ -129,13 +129,13 @@ function listjobcosting(){
 					{ data: null }
 				],
 				"columnDefs": [ 
-					/*{ 
+					{ 
 						"targets": [0], 
 						"render": function ( data, type, row, meta ) {
 							number++;
 							return number;
 						}
-					},	*/
+					},	
 					{ 
 						"targets": [1], 
 						"render": function ( data, type, row, meta ) {

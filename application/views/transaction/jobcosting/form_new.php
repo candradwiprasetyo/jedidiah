@@ -19,7 +19,7 @@
 				<label class="col-sm-4 control-label">Routing</label>
 				
 					<div class="col-sm-6">
-					<input  type="text" class="form-control input-sm" name="i_jc_routing" id="i_jc_routing" value="<?= $jc_routing ?>">
+					<input readonly type="text" class="form-control input-sm" name="i_jc_routing" id="i_jc_routing" value="<?= $jc_routing ?>">
 					</div>
 				</div>
 			</div>
@@ -29,7 +29,7 @@
 				<label class="col-sm-4 control-label">Closing Date</label>
 				
 					<div class="col-sm-6">
-						<input  type="text" class="form-control input-sm datepicker" name="i_jc_closing_date" id="i_jc_closing_date" value="<?= $jc_closing_date ?>">
+						<input readonly type="text" class="form-control input-sm datepicker" name="i_jc_closing_date" id="i_jc_closing_date" value="">
 				</div>
 				</div>
 				
@@ -37,7 +37,7 @@
 				<label class="col-sm-4 control-label">ETD</label>
 				
 					<div class="col-sm-6">
-					<input  type="text" class="form-control input-sm" name="i_jc_etd" id="i_jc_etd" value="<?= $jc_etd ?>">
+					<input readonly type="text" class="form-control input-sm" name="i_jc_etd" id="i_jc_etd" value="<?= $jc_etd ?>">
 					</div>
 				</div>
 			</div>
@@ -47,9 +47,8 @@
 				<label class="col-sm-4 control-label">Customer Name</label>
 				
 					<div class="col-sm-6">
-						<!--<input  type="text" class="form-control input-sm" name="i_costumer_name" id="i_costumer_name" value="">
-					-->
-					<select name="i_costumer_code" id="i_costumer_code" style="width:100%"></select>
+						<input readonly type="text" class="form-control input-sm" name="i_costumer_name" id="i_costumer_name" value="">
+					
 				</div>
 				</div>
 				
@@ -57,7 +56,7 @@
 				<label class="col-sm-4 control-label">ETA</label>
 				
 					<div class="col-sm-6">
-					<input  type="text" class="form-control input-sm" name="i_jc_eta" id="i_jc_eta" value="<?= $jc_eta ?>">
+					<input readonly type="text" class="form-control input-sm" name="i_jc_eta" id="i_jc_eta" value="<?= $jc_eta ?>">
 					</div>
 				</div>
 			</div>
@@ -67,18 +66,9 @@
 				<label class="col-sm-4 control-label">Transport</label>
 				
 					<div class="col-sm-6">
-						<select name="i_jc_transport_type_id" id="i_jc_transport_type_id" style="width:100%" class="form-control">
-							<?php
-							$q_transport_type = mysql_query("select * from trs_job_costing_transport_type");
-							while($r_transport_type = mysql_fetch_array($q_transport_type)){
-							?>
-								<option value="<?= $r_transport_type['jc_transport_type_id'] ?>" <?php if($jc_transport_type_id == $r_transport_type['jc_transport_type_id']){ echo "selected"; } ?>><?= $r_transport_type['jc_transport_type_name']?></option>
-							<?php
-							}
-							?>
-							
-						</select>
 						
+						<input readonly type="text" class="form-control input-sm" name="i_jc_transport_type_id" id="i_jc_transport_type_id" value="">
+					
 
 					</div>
 				</div>
@@ -87,17 +77,9 @@
 				<label class="col-sm-4 control-label">Status</label>
 				
 					<div class="col-sm-6">
-						<select name="i_jc_status_id" id="i_jc_status_id" style="width:100%" class="form-control">
-							<?php
-							$q_status = mysql_query("select * from trs_job_costing_status");
-							while($r_status = mysql_fetch_array($q_status)){
-							?>
-								<option value="<?= $r_status['jc_status_id'] ?>" <?php if($jc_status_id == $r_status['jc_status_id']){ echo "selected"; } ?>><?= $r_status['jc_status_name']?></option>
-							<?php
-							}
-							?>
-							
-						</select>
+						
+						<input readonly type="text" class="form-control input-sm" name="i_jc_status_id" id="i_jc_status_id" value="">
+					
 					</div>
 				</div>
 			</div>
@@ -107,7 +89,7 @@
 				<label class="col-sm-4 control-label">E/I/D</label>
 				
 					<div class="col-sm-6">
-						<input  type="text" class="form-control input-sm" name="i_jc_eid" id="i_jc_eid" value="<?= $jc_eid ?>">
+						<input readonly type="text" class="form-control input-sm" name="i_jc_eid" id="i_jc_eid" value="<?= $jc_eid ?>">
 				</div>
 				</div>
 				
@@ -115,7 +97,7 @@
 				<label class="col-sm-4 control-label">USD Rate</label>
 				
 					<div class="col-sm-6">
-					<input  type="text" class="form-control input-sm" name="i_jc_usd_rate" id="i_jc_usd_rate" value="<?= $jc_usd_rate ?>">
+					<input readonly type="text" class="form-control input-sm" name="i_jc_usd_rate" id="i_jc_usd_rate" value="<?= $jc_usd_rate ?>">
 					</div>
 				</div>
 			</div>
@@ -125,7 +107,7 @@
 				<label class="col-sm-4 control-label">Party</label>
 				
 					<div class="col-sm-6">
-						<input 	 type="text" class="form-control input-sm" name="i_jc_party" id="i_jc_party" value="<?= $jc_party ?>">
+						<input readonly type="text" class="form-control input-sm" name="i_jc_party" id="i_jc_party" value="<?= $jc_party ?>">
 				</div>
 				</div>
 				
@@ -1366,11 +1348,11 @@
 					
 					if(row.job_order_id == '<?= $job_order_id ?>'){
 
-						fillOption += '<option selected data-address="" value='+row.job_order_id+'>'+job_order+'</option>';
+						fillOption += '<option selected data-address="">'+job_order+'</option>';
 					
 					}else{
 					
-						fillOption += '<option data-address=""  value='+row.job_order_id+'>'+job_order+'</option>';
+						fillOption += '<option data-address="">'+job_order+'</option>';
 					}
 				});
 

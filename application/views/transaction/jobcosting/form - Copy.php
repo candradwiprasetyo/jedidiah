@@ -11,7 +11,7 @@
 				
 					<div class="col-sm-6">
 					<input type="hidden" class="form-control input-sm" name="i_row_id" id="i_row_id" value="<?= $row_id ?>">
-					<select name="i_job_order_id" id="i_job_order_id" style="width:100%"></select>
+					<input type="text" class="form-control input-sm" name="i_jc_booking" id="i_jc_booking" value="<?= $jc_booking ?>">
 					</div>
 				</div>
 				
@@ -19,7 +19,7 @@
 				<label class="col-sm-4 control-label">Routing</label>
 				
 					<div class="col-sm-6">
-					<input  type="text" class="form-control input-sm" name="i_jc_routing" id="i_jc_routing" value="<?= $jc_routing ?>">
+					<input type="text" class="form-control input-sm" name="i_jc_routing" id="i_jc_routing" value="<?= $jc_routing ?>">
 					</div>
 				</div>
 			</div>
@@ -29,7 +29,7 @@
 				<label class="col-sm-4 control-label">Closing Date</label>
 				
 					<div class="col-sm-6">
-						<input  type="text" class="form-control input-sm datepicker" name="i_jc_closing_date" id="i_jc_closing_date" value="<?= $jc_closing_date ?>">
+						<input type="text" class="form-control input-sm datepicker" name="i_jc_closing_date" id="i_jc_closing_date" value="<?= $jc_closing_date ?>">
 				</div>
 				</div>
 				
@@ -37,7 +37,7 @@
 				<label class="col-sm-4 control-label">ETD</label>
 				
 					<div class="col-sm-6">
-					<input  type="text" class="form-control input-sm" name="i_jc_etd" id="i_jc_etd" value="<?= $jc_etd ?>">
+					<input type="text" class="form-control input-sm" name="i_jc_etd" id="i_jc_etd" value="<?= $jc_etd ?>">
 					</div>
 				</div>
 			</div>
@@ -47,9 +47,7 @@
 				<label class="col-sm-4 control-label">Customer Name</label>
 				
 					<div class="col-sm-6">
-						<!--<input  type="text" class="form-control input-sm" name="i_costumer_name" id="i_costumer_name" value="">
-					-->
-					<select name="i_costumer_code" id="i_costumer_code" style="width:100%"></select>
+						<select name="i_costumer_code" id="i_costumer_code" style="width:100%"></select>
 				</div>
 				</div>
 				
@@ -57,7 +55,7 @@
 				<label class="col-sm-4 control-label">ETA</label>
 				
 					<div class="col-sm-6">
-					<input  type="text" class="form-control input-sm" name="i_jc_eta" id="i_jc_eta" value="<?= $jc_eta ?>">
+					<input type="text" class="form-control input-sm" name="i_jc_eta" id="i_jc_eta" value="<?= $jc_eta ?>">
 					</div>
 				</div>
 			</div>
@@ -78,7 +76,6 @@
 							?>
 							
 						</select>
-						
 
 					</div>
 				</div>
@@ -107,7 +104,7 @@
 				<label class="col-sm-4 control-label">E/I/D</label>
 				
 					<div class="col-sm-6">
-						<input  type="text" class="form-control input-sm" name="i_jc_eid" id="i_jc_eid" value="<?= $jc_eid ?>">
+						<input type="text" class="form-control input-sm" name="i_jc_eid" id="i_jc_eid" value="<?= $jc_eid ?>">
 				</div>
 				</div>
 				
@@ -115,7 +112,7 @@
 				<label class="col-sm-4 control-label">USD Rate</label>
 				
 					<div class="col-sm-6">
-					<input  type="text" class="form-control input-sm" name="i_jc_usd_rate" id="i_jc_usd_rate" value="<?= $jc_usd_rate ?>">
+					<input type="text" class="form-control input-sm" name="i_jc_usd_rate" id="i_jc_usd_rate" value="<?= $jc_usd_rate ?>">
 					</div>
 				</div>
 			</div>
@@ -125,7 +122,7 @@
 				<label class="col-sm-4 control-label">Party</label>
 				
 					<div class="col-sm-6">
-						<input 	 type="text" class="form-control input-sm" name="i_jc_party" id="i_jc_party" value="<?= $jc_party ?>">
+						<input type="text" class="form-control input-sm" name="i_jc_party" id="i_jc_party" value="<?= $jc_party ?>">
 				</div>
 				</div>
 				
@@ -154,7 +151,7 @@
 			
 			
 		<?php
-        if($row_id){
+       /* if($row_id){
 		?>
 					
 			<div style="max-width:100%; width:100%; border: 1px solid #ccc; overflow-x:scroll;">
@@ -194,7 +191,7 @@
 			
 				
 		<?php
-		}
+		}*/
 		?>
 			
 			
@@ -389,8 +386,7 @@
 		$("input#i_costumer_email").val(email);
 	}
 
-	function  getDataRatemanagement(jc_id){
-		fillSelectJoborder();
+	function  getDataRatemanagement(id_ratemanagement){
 		fillSelectCostumerCode();
 		fillSelectEmployee();
 		fillSelectCostumer();
@@ -402,7 +398,7 @@
 			async		: false,
 			type		: "POST",
 			dataType	: 'json',
-			url			: "<?php echo base_url('trs/jobcosting/getbydetail') ?>"+"/"+jc_id,
+			url			: "<?php echo base_url('trs/ratemanagement/getbydetail') ?>"+"/"+id_ratemanagement,
 			beforeSend	: function(){
 
 			},
@@ -413,7 +409,10 @@
 				//$("select#insurance").val(json.insurance); onChangeInsurance(json.insurance);
 				//$("select#insurancevalue").val(json.insurance_value);
 				//$("select#i_costumer_code").select2("val", json.shipping_doc); onChangeCostumerCode();
-				//$("input[type='radio']#"+json.sent_by).prop("checked",true);
+				//$("input[type='radio']#"+json.sent_by).prop("checked",true); 
+				
+			
+			
 
 			},
 			complete	: function(){
@@ -424,7 +423,7 @@
 
 	// UNTUK TABEL BILL OF LEADING
 	function initiateTabelBl(){
-		var jc_id = $("input#i_row_id").val();
+		var id_ratemanagement = $("input#i_row_id").val();
 		var no = 0;
 		$("table#tabelbl tbody").empty();
 		
@@ -432,10 +431,8 @@
 			async		: false,
 			type		: "POST",
 			dataType	: 'json',
-			url			: "<?php echo base_url("trs/jobcosting/getdetailcharge") ?>"+"/"+jc_id,
+			url			: "<?php echo base_url("trs/ratemanagement/getdetailcharge") ?>"+"/"+id_ratemanagement,
 			success		: function(json){	
-				
-				var optionRmrc = fillSelectRmrc();
 				var optionCharge = fillSelectCharge();
 				var optionOrigin = fillSelectCity(1);
 				var optionDestination = fillSelectCity(2);
@@ -443,60 +440,61 @@
 				var optionCurrency = fillSelectCurrency();
 				var optionMovement = fillSelectMovement();
 				var optionCargo = fillSelectCargo();
-				var optiondetailstatus = fillSelectdetailstatus();
-
-
 				
 				$.each(json, function(index, row) {
 					var isiTrow = '';
-					no = row.jcd_id;
+					no = row.rmrc_id;
 					
 					isiTrow = '<tr id="'+no+'">';
-					isiTrow += '<td><input type="hidden" class="form-control input-sm" name="t_detail_id" id="t_detail_id" value="'+row.jcd_id+'">';
-					isiTrow += '<input type="text" class="form-control input-sm" name="t_description" id="t_description" value="'+row.jcd_description+'"></td>';				
-					isiTrow += '<td><select class="form-control input-sm" name="t_rmrc_id" id="t_rmrc_id">'+optionRmrc+'</select></td>';
-					isiTrow += '<td><input type="text" class="form-control input-sm" name="t_partner_type" id="t_partner_type" value="'+row.jcd_partner_type+'"></td>';				
-					isiTrow += '<td><input type="text" class="form-control input-sm" name="t_partner_name" id="t_partner_name" value="'+row.jcd_partner_name+'"></td>';				
+					isiTrow += '<td><select class="form-control input-sm" name="t_charge" id="t_charge"">'+optionCharge+'</select></td>';
+					isiTrow += '<td><select class="form-control input-sm" name="t_origin" id="t_origin">'+optionOrigin+'</select></td>';
+					isiTrow += '<td><select class="form-control input-sm" name="t_destination" id="t_destination">'+optionDestination+'</select></td>';
 					isiTrow += '<td><select class="form-control input-sm" name="t_unit" id="t_unit">'+optionUnit+'</select></td>';
-					isiTrow += '<td><select class="form-control input-sm" name="t_currency_code" id="t_currency_code">'+optionCurrency+'</select></td>';
-					isiTrow += '<td><input type="text" class="form-control input-sm" name="t_rate" id="t_rate" value="'+row.jcd_rate+'"></td>';				
-					isiTrow += '<td><input type="text" class="form-control input-sm" name="t_jc_qty" id="t_jc_qty" value="'+row.jcd_jc_qty+'"></td>';				
-					isiTrow += '<td><input type="text" class="form-control input-sm" name="t_jc_price" id="t_jc_price" value="'+row.jcd_jc_price+'"></td>';				
-					isiTrow += '<td><input type="text" class="form-control input-sm" name="t_jc_subtotal" id="t_jc_subtotal" value="'+row.jcd_jc_subtotal+'"></td>';	
-					isiTrow += '<td><input type="text" class=" -control input-sm" name="t_rei" id="t_rei" value="'+row.jcd_rei+'"></td>';	
-					isiTrow += '<td><select class="form-control input-sm" name="t_pc" id="t_pc">';
-					isiTrow += '<option>- Select P/C -</option>';
-					isiTrow += '<option value="1">P</option>';
-					isiTrow += '<option value="2">C</option>';
+					isiTrow += '<td><select class="form-control input-sm" name="t_currency" id="t_currency">'+optionCurrency+'</select></td>';
+					isiTrow += '<td><input type="text" class="form-control input-sm" name="t_buying" id="t_buying" value="'+row.rmrc_buying+'"></td>';
+					isiTrow += '<td><select class="form-control input-sm" name="t_movement" id="t_movement">'+optionMovement+'</select></td>';
+					isiTrow += '<td><select class="form-control input-sm" name="t_load" id="t_load">';
+					isiTrow += '<option>- Select Load Type -</option>';
+					isiTrow += '<option value="FCL/FCL">FCL/FCL </option>';
+					isiTrow += '<option value="FCL/FCL">LCL/LCL  </option>';
+					isiTrow += '<option value="FCL/FCL">FCL/LCL  </option>';
+					isiTrow += '<option value="FCL/FCL">LCL/FCL  </option>';
+					isiTrow += '<option value="FCL/FCL">Break-bulk  </option>';
+					isiTrow += '<option value="FCL/FCL">Bulk </option>';
 					isiTrow += '</select></td>';
-					isiTrow += '<td><input type="text" class="form-control input-sm datepicker" name="t_due_date" id="t_due_date" value="'+row.jcd_due_date+'"></td>';	
-					isiTrow += '<td><select class="form-control input-sm" name="t_status_id" id="t_status_id">'+optiondetailstatus+'</select></td>';
-					isiTrow += '<td><input type="text" class="form-control input-sm" name="t_qty" id="t_qty" value="'+row.jcd_qty+'"></td>';	
-					isiTrow += '<td><input type="text" class="form-control input-sm" name="t_aqty" id="t_aqty" value="'+row.jcd_aqty+'"></td>';	
-					isiTrow += '<td class="text-center">';
-					//isiTrow += '<button style="display:none" type="button" class="btn btn-xs btn-info" id="btnWdBl" onclick="return onClickWdBl('+no+')" >WD</button> ';
-					isiTrow += '<button type="button" class="btn btn-xs btn-danger" id="btnSaveBl" onclick="return onClickEditBl('+no+')" >Save</button> ';
-					isiTrow += '<button type="button" class="btn btn-xs btn-success" id="btnAddBl" onclick="return onClickAddBl('+no+')"> Add </button> ';
-					isiTrow += '<button type="button" class="btn btn-xs btn-success" id="btnDelBl" onclick="return onClickDelBl('+no+')"> Del </button> ';
-					isiTrow += '<input type="hidden" id="idBl" />';
-					isiTrow += '</td>';
+					isiTrow += '<td><select class="form-control input-sm" name="t_pc" id="t_pc">'+optionCharge+'</select></td>';
+					isiTrow += '<td><select class="form-control input-sm" name="t_cargo" id="t_cargo">'+optionCargo+'</select></td>';
+					isiTrow += '<td><select class="form-control input-sm" name="t_transshipment" id="t_transshipment">'+optionCharge+'</select></td>';
+					isiTrow += '<td><input type="text" class="form-control input-sm" name="t_time" id="t_time" value="'+row.rmrc_t_time+'"></td>';
+					isiTrow += '<td><input type="text" class="form-control input-sm" name="t_free_dem" id="t_free_dem" value="'+row.rmrc_free_dem+'"></td>';
+					isiTrow += '<td><input type="text" class="form-control input-sm" name="t_free_det" id="t_free_det" value="'+row.rmrc_free_det+'"></td>';
+					isiTrow += '<td><input type="text" class="form-control input-sm" name="t_free_dem_det" id="t_free_dem_det" value="'+row.rmrc_free_dem_det+'"></td>';
+					isiTrow += '<td><input type="text" class="form-control input-sm" name="t_min_qty" id="t_min_qty" value="'+row.rmrc_min_qty+'"></td>';
+					isiTrow += '<td><input type="text" class="form-control input-sm" name="t_remark" id="t_remark" value="'+row.rmrc_remark+'"></td>';
 					
+				
+					isiTrow += '<td class="text-center">';
+					//isiTrow += '<button type="button" class="btn btn-xs btn-info" id="btnWdBl" onclick="return onClickWdBl('+no+')" >WD</button> ';
+					isiTrow += '<button style="display:none" type="button" class="btn btn-xs btn-danger" id="btnSaveBl" onclick="return onClickSaveBl('+no+')" >Save</button> ';
+					isiTrow += '<button style="display:none" type="button" class="btn btn-xs btn-success" id="btnAddBl" onclick="return onClickAddBl('+no+')"> Add </button> ';
+							isiTrow += '<button type="button" class="btn btn-xs btn-success" id="btnDelBl" onclick="return onClickDelBl('+no+')"> Del </button> ';
+							isiTrow += '<input type="hidden" id="idBl" value="'+no+'" />';
+					isiTrow += '</td>';
+				
 					isiTrow += '</tr>';
 					
 					$("table#tabelbl tbody").append(isiTrow);
 					var thisRow = $("table#tabelbl tbody").find("tr#"+no);
-					thisRow.find("select#t_rmrc_id").val(row.rmrc_id);
-					thisRow.find("select#t_unit").val(row.jcd_unit);
-					thisRow.find("select#t_currency_code").val(row.currency_code);
-					thisRow.find("select#t_pc").val(row.jcd_pc);
-					thisRow.find("select#t_status_id").val(row.jcd_status_id);
-
-					$('.datepicker').datepicker({
-						format: 'yyyy-mm-dd',
-						todayHighlight: true,
-						autoclose: true
-					});
-					
+					thisRow.find("select#t_charge").val(row.rmrc_charge_name);
+					thisRow.find("select#t_origin").val(row.rmrc_origin);
+					thisRow.find("select#t_destination").val(row.rmrc_destination);
+					thisRow.find("select#t_unit").val(row.rmrc_unit);
+					thisRow.find("select#t_currency").val(row.rmrc_currency);
+					thisRow.find("select#t_movement").val(row.rmrc_movement);
+					thisRow.find("select#t_load").val(row.rmrc_load);
+					thisRow.find("select#t_pc").val(row.rmrc_pc);
+					thisRow.find("select#t_cargo").val(row.rmrc_cargo_type);
+					thisRow.find("select#t_transshipment").val(row.rmrc_transshipment);
 				});
 			},
 			//error		: function(){
@@ -654,7 +652,6 @@
 	
 	function generateRowBl(no){
 		var isiTrow = '';
-		var optionRmrc = fillSelectRmrc();
 		var optionCharge = fillSelectCharge();
 		var optionOrigin = fillSelectCity(1);
 		var optionDestination = fillSelectCity(2);
@@ -662,29 +659,34 @@
 		var optionCurrency = fillSelectCurrency();
 		var optionMovement = fillSelectMovement();
 		var optionCargo = fillSelectCargo();
-		var optiondetailstatus = fillSelectdetailstatus();
 
 		isiTrow = '<tr id="'+no+'">';
-					isiTrow += '<td><input type="text" class="form-control input-sm" name="t_description" id="t_description" value=""></td>';				
-					isiTrow += '<td><select class="form-control input-sm" name="t_rmrc_id" id="t_rmrc_id">'+optionRmrc+'</select></td>';
-					isiTrow += '<td><input type="text" class="form-control input-sm" name="t_partner_type" id="t_partner_type" value=""></td>';				
-					isiTrow += '<td><input type="text" class="form-control input-sm" name="t_partner_name" id="t_partner_name" value=""></td>';				
+		isiTrow += '<td><select class="form-control input-sm" name="t_charge" id="t_charge" required>'+optionCharge+'</select></td>';
+					isiTrow += '<td><select class="form-control input-sm" name="t_origin" id="t_origin">'+optionOrigin+'</select></td>';
+					isiTrow += '<td><select class="form-control input-sm" name="t_destination" id="t_destination">'+optionDestination+'</select></td>';
 					isiTrow += '<td><select class="form-control input-sm" name="t_unit" id="t_unit">'+optionUnit+'</select></td>';
-					isiTrow += '<td><select class="form-control input-sm" name="t_currency_code" id="t_currency_code">'+optionCurrency+'</select></td>';
-					isiTrow += '<td><input type="text" class="form-control input-sm" name="t_rate" id="t_rate" value=""></td>';				
-					isiTrow += '<td><input type="text" class="form-control input-sm" name="t_jc_qty" id="t_jc_qty" value=""></td>';				
-					isiTrow += '<td><input type="text" class="form-control input-sm" name="t_jc_price" id="t_jc_price" value=""></td>';				
-					isiTrow += '<td><input type="text" class="form-control input-sm" name="t_jc_subtotal" id="t_jc_subtotal" value=""></td>';	
-					isiTrow += '<td><input type="text" class="form-control input-sm" name="t_rei" id="t_rei" value=""></td>';	
-					isiTrow += '<td><select class="form-control input-sm" name="t_pc" id="t_pc">';
-					isiTrow += '<option>- Select P/C -</option>';
-					isiTrow += '<option value="1">P</option>';
-					isiTrow += '<option value="2">C</option>';
+					isiTrow += '<td><select class="form-control input-sm" name="t_currency" id="t_currency">'+optionCurrency+'</select></td>';
+					isiTrow += '<td><input type="text" class="form-control input-sm" name="t_buying" id="t_buying" value=""></td>';
+					isiTrow += '<td><select class="form-control input-sm" name="t_movement" id="t_movement">'+optionMovement+'</select></td>';
+					isiTrow += '<td><select class="form-control input-sm" name="t_load" id="t_load">';
+					isiTrow += '<option>- Select Load Type -</option>';
+					isiTrow += '<option value="FCL/FCL">FCL/FCL </option>';
+					isiTrow += '<option value="FCL/FCL">LCL/LCL  </option>';
+					isiTrow += '<option value="FCL/FCL">FCL/LCL  </option>';
+					isiTrow += '<option value="FCL/FCL">LCL/FCL  </option>';
+					isiTrow += '<option value="FCL/FCL">Break-bulk  </option>';
+					isiTrow += '<option value="FCL/FCL">Bulk </option>';
 					isiTrow += '</select></td>';
-					isiTrow += '<td><input type="text" class="form-control input-sm datepicker" name="t_due_date" id="t_due_date" value=""></td>';	
-					isiTrow += '<td><select class="form-control input-sm" name="t_status_id" id="t_status_id">'+optiondetailstatus+'</select></td>';
-					isiTrow += '<td><input type="text" class="form-control input-sm" name="t_qty" id="t_qty" value=""></td>';	
-					isiTrow += '<td><input type="text" class="form-control input-sm" name="t_aqty" id="t_aqty" value=""></td>';	
+					isiTrow += '<td><select class="form-control input-sm" name="t_pc" id="t_pc">'+optionCharge+'</select></td>';
+					isiTrow += '<td><select class="form-control input-sm" name="t_cargo" id="t_cargo">'+optionCargo+'</select></td>';
+					isiTrow += '<td><select class="form-control input-sm" name="t_transshipment" id="t_transshipment">'+optionCharge+'</select></td>';
+					isiTrow += '<td><input type="text" class="form-control input-sm" name="t_time" id="t_time" value="" required></td>';
+					isiTrow += '<td><input type="text" class="form-control input-sm" name="t_free_dem" id="t_free_dem" value=""></td>';
+					isiTrow += '<td><input type="text" class="form-control input-sm" name="t_free_det" id="t_free_det" value=""></td>';
+					isiTrow += '<td><input type="text" class="form-control input-sm" name="t_free_dem_det" id="t_free_dem_det" value=""></td>';
+					isiTrow += '<td><input type="text" class="form-control input-sm" name="t_min_qty" id="t_min_qty" value=""></td>';
+					isiTrow += '<td><input type="text" class="form-control input-sm" name="t_remark" id="t_remark" value=""></td>';
+					
 					isiTrow += '<td class="text-center">';
 		//isiTrow += '<button style="display:none" type="button" class="btn btn-xs btn-info" id="btnWdBl" onclick="return onClickWdBl('+no+')" >WD</button> ';
 		isiTrow += '<button type="button" class="btn btn-xs btn-danger" id="btnSaveBl" onclick="return onClickSaveBl('+no+')" >Save</button> ';
@@ -696,51 +698,6 @@
 		isiTrow += '</tr>';
 		
 		return isiTrow;
-	}
-
-	
-	
-
-	function fillSelectRmrc(){
-		var isi = "";
-		$.ajax({
-			async		: false,
-			type		: "POST",
-			dataType	: 'json',
-			url			: "<?php echo base_url('trs/jobcosting/getallrmrc') ?>",
-			success		: function(json){
-				var fillOption = "<option value=''>- Select Item -</option>";
-				$.each(json, function(index, row) {
-					fillOption += '<option value="'+row.rmrc_id+'">BR No : '+row.rate_management_number+' | '+' Charge Name : ' +row.rmrc_charge_name+'</option>';
-				});
-				isi = fillOption;
-			},
-			error		: function(){
-				alert("error");
-			}
-		});	
-		return isi;
-	}
-
-	function fillSelectdetailstatus(){
-		var isi = "";
-		$.ajax({
-			async		: false,
-			type		: "POST",
-			dataType	: 'json',
-			url			: "<?php echo base_url('trs/jobcosting/getalldetailstatus') ?>",
-			success		: function(json){
-				var fillOption = "<option value=''>- Select Status -</option>";
-				$.each(json, function(index, row) {
-					fillOption += '<option value="'+row.jcd_status_id+'">'+row.jcd_status_name+'</option>';
-				});
-				isi = fillOption;
-			},
-			error		: function(){
-				alert("error");
-			}
-		});	
-		return isi;
 	}
 	
 	function onClickAddBl(number){
@@ -852,76 +809,33 @@
 		var thisButton = tRow.find("button#btnSaveBl");
 		var buttonDetail = tRow.find("button#btnWdBl")
 		
-		var jc_id = $("input#i_row_id").val();
+		var id_ratemanagement = $("input#i_row_id").val();
 		
 		var data_bl = {
-						t_rmrc_id: tRow.find("select#t_rmrc_id").val(), 
-						t_description: tRow.find("input#t_description").val(), 
-						t_partner_type: tRow.find("input#t_partner_type").val(), 
-						t_partner_name: tRow.find("input#t_partner_name").val(), 
-						t_unit: tRow.find("select#t_unit").val(),
-						t_currency_code: tRow.find("select#t_currency_code").val(), 
-						t_rate: tRow.find("input#t_rate").val(), 
-						t_jc_qty: tRow.find("input#t_jc_qty").val(),
-						t_jc_price: tRow.find("input#t_jc_price").val(),
-						t_jc_subtotal: tRow.find("input#t_jc_subtotal").val(),
-						t_rei: tRow.find("input#t_rei").val(),
+						t_charge: tRow.find("select#t_charge").val(), 
+						t_origin: tRow.find("select#t_origin").val(), 
+						t_destionation: tRow.find("select#t_destination").val(),
+						t_unit: tRow.find("select#t_unit").val(), 
+						t_currency: tRow.find("select#t_currency").val(), 
+						t_buying: tRow.find("input#t_buying").val(),
+						t_movement: tRow.find("select#t_movement").val(), 
+						t_load: tRow.find("select#t_load").val(), 
 						t_pc: tRow.find("select#t_pc").val(),
-						t_due_date: tRow.find("input#t_due_date").val(),
-						t_status_id: tRow.find("select#t_status_id").val(),
-						t_qty: tRow.find("input#t_qty").val(),
-						t_aqty: tRow.find("input#t_aqty").val()
+						t_cargo: tRow.find("select#t_cargo").val(),
+						t_transshipment: tRow.find("select#t_transshipment").val(),
+						t_time: tRow.find("input#t_time").val(),
+						t_free_dem: tRow.find("input#t_free_dem").val(),
+						t_free_det: tRow.find("input#t_free_det").val(),
+						t_free_dem_det: tRow.find("input#t_free_dem_det").val(),
+						t_min_qty: tRow.find("input#t_min_qty").val(),
+						t_remark: tRow.find("input#t_remark").val()
 					  };
 			
 		$.ajax({
 			type		: "POST",
 			dataType	: 'json',
-			data		: {jc_id:jc_id, object_data: data_bl},
-			url			: "<?php echo base_url('jobcosting/commitdetail/') ?>",
-			success		: function(json){
-				alert("Data saved");
-				tRow.find("input#idBl").val(json);
-				thisButton.hide();
-				buttonDetail.show();
-			},
-			error		: function(){
-				alert("error");
-			}
-		});	
-	}
-
-
-	function onClickEditBl(number){
-		var tRow = $("table#tabelbl tbody").find("tr#"+number);
-		var thisButton = tRow.find("button#btnSaveBl");
-		var buttonDetail = tRow.find("button#btnWdBl")
-		
-		var detail_id = tRow.find("input#t_detail_id").val();
-		
-		var data_bl = {
-						t_rmrc_id: tRow.find("select#t_rmrc_id").val(), 
-						t_description: tRow.find("input#t_description").val(), 
-						t_partner_type: tRow.find("input#t_partner_type").val(), 
-						t_partner_name: tRow.find("input#t_partner_name").val(), 
-						t_unit: tRow.find("select#t_unit").val(),
-						t_currency_code: tRow.find("select#t_currency_code").val(), 
-						t_rate: tRow.find("input#t_rate").val(), 
-						t_jc_qty: tRow.find("input#t_jc_qty").val(),
-						t_jc_price: tRow.find("input#t_jc_price").val(),
-						t_jc_subtotal: tRow.find("input#t_jc_subtotal").val(),
-						t_rei: tRow.find("input#t_rei").val(),
-						t_pc: tRow.find("select#t_pc").val(),
-						t_due_date: tRow.find("input#t_due_date").val(),
-						t_status_id: tRow.find("select#t_status_id").val(),
-						t_qty: tRow.find("input#t_qty").val(),
-						t_aqty: tRow.find("input#t_aqty").val()
-					  };
-			
-		$.ajax({
-			type		: "POST",
-			dataType	: 'json',
-			data		: {detail_id:detail_id, object_data: data_bl},
-			url			: "<?php echo base_url('jobcosting/editdetail/') ?>",
+			data		: {id_ratemanagement:id_ratemanagement, object_data: data_bl},
+			url			: "<?php echo base_url('ratemanagement/commitdetail') ?>",
 			success		: function(json){
 				alert("Data saved");
 				tRow.find("input#idBl").val(json);
@@ -1349,38 +1263,6 @@
 	}
 						
 	// UNTUK TABEL REQUEST DOCUMENT	SELESAI
-
-	function fillSelectJoborder(){
-		$.ajax({
-			async		: false,
-			type		: "POST",
-			dataType	: 'json',
-			url			: "<?php echo base_url("trs/jobcosting/getalljoborder") ?>",
-			success		: function(json){
-				$("select#i_job_order_id").empty().append();
-			
-				var fillOption = "<option value=''>- Select Job Order -</option>";
-				
-				$.each(json, function(index, row) {
-					var job_order = row.booking_no + " | " + row.costumer_name;
-					
-					if(row.job_order_id == '<?= $job_order_id ?>'){
-
-						fillOption += '<option selected data-address="" value='+row.job_order_id+'>'+job_order+'</option>';
-					
-					}else{
-					
-						fillOption += '<option data-address=""  value='+row.job_order_id+'>'+job_order+'</option>';
-					}
-				});
-
-				$("select#i_job_order_id").empty().append(fillOption);
-			},
-			complete	: function(){
-				$("select#i_job_order_id").select2();
-			}
-		});			
-	}
 	
 	function fillSelectCostumerCode(){
 		$.ajax({
