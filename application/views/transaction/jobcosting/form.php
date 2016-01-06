@@ -47,9 +47,10 @@
 				<label class="col-sm-4 control-label">Customer Name</label>
 				
 					<div class="col-sm-6">
-						<!--<input  type="text" class="form-control input-sm" name="i_costumer_name" id="i_costumer_name" value="">
-					-->
-					<select name="i_costumer_code" id="i_costumer_code" style="width:100%"></select>
+                    <input  type="text" class="form-control input-sm" name="i_costumer_code" id="i_costumer_code" value="<?= $costumer_code ?>">
+						<input  type="text" class="form-control input-sm" name="i_costumer_name" id="i_costumer_name" value="<?= $costumer_name ?>">
+					
+					
 				</div>
 				</div>
 				
@@ -67,17 +68,7 @@
 				<label class="col-sm-4 control-label">Transport</label>
 				
 					<div class="col-sm-6">
-						<select name="i_jc_transport_type_id" id="i_jc_transport_type_id" style="width:100%" class="form-control">
-							<?php
-							$q_transport_type = mysql_query("select * from trs_job_costing_transport_type");
-							while($r_transport_type = mysql_fetch_array($q_transport_type)){
-							?>
-								<option value="<?= $r_transport_type['jc_transport_type_id'] ?>" <?php if($jc_transport_type_id == $r_transport_type['jc_transport_type_id']){ echo "selected"; } ?>><?= $r_transport_type['jc_transport_type_name']?></option>
-							<?php
-							}
-							?>
-							
-						</select>
+						<input  type="text" class="form-control input-sm" name="i_jc_transport_type_id" id="i_jc_transport_type_id" value="<?= $jc_transport_type_id ?>">
 						
 
 					</div>
@@ -154,7 +145,7 @@
 			
 			
 		<?php
-        if($row_id){
+        //if($row_id){
 		?>
 					
 			<div style="max-width:100%; width:100%; border: 1px solid #ccc; overflow-x:scroll;">
@@ -194,7 +185,7 @@
 			
 				
 		<?php
-		}
+		//}
 		?>
 			
 			
@@ -242,6 +233,10 @@
 
 		$("select#i_costumer_code").change(function(){
 			onChangeCostumerCode();
+		});
+		
+		$("select#i_job_order_id").change(function(){
+			onChangeJobOrder();
 		});
 		
 
@@ -388,6 +383,20 @@
 		$("input#i_costumer_phone").val(phone);
 		$("input#i_costumer_email").val(email);
 	}
+	
+	function onChangeJobOrder(){
+		var close_date = $("select#i_job_order_id option:selected").data("close_date");
+		var costumer_code = $("select#i_job_order_id option:selected").data("costumer_code");
+		var costumer_name = $("select#i_job_order_id option:selected").data("costumer_name");
+		var mode_of_transport = $("select#i_job_order_id option:selected").data("mode_of_transport");
+		
+		$("input#i_jc_closing_date").val(close_date);
+		$("input#i_costumer_code").val(costumer_code);
+		$("input#i_costumer_name").val(costumer_name);
+		$("input#i_jc_transport_type_id").val(mode_of_transport);
+		
+		
+	}
 
 	function  getDataRatemanagement(jc_id){
 		fillSelectJoborder();
@@ -474,7 +483,7 @@
 					isiTrow += '<td><input type="text" class="form-control input-sm" name="t_qty" id="t_qty" value="'+row.jcd_qty+'"></td>';	
 					isiTrow += '<td><input type="text" class="form-control input-sm" name="t_aqty" id="t_aqty" value="'+row.jcd_aqty+'"></td>';	
 					isiTrow += '<td class="text-center">';
-					//isiTrow += '<button style="display:none" type="button" class="btn btn-xs btn-info" id="btnWdBl" onclick="return onClickWdBl('+no+')" >WD</button> ';
+					isiTrow += '<button style="display:none" type="button" class="btn btn-xs btn-info" id="btnWdBl" onclick="return onClickWdBl('+no+')" >WD</button> ';
 					isiTrow += '<button type="button" class="btn btn-xs btn-danger" id="btnSaveBl" onclick="return onClickEditBl('+no+')" >Save</button> ';
 					isiTrow += '<button type="button" class="btn btn-xs btn-success" id="btnAddBl" onclick="return onClickAddBl('+no+')"> Add </button> ';
 					isiTrow += '<button type="button" class="btn btn-xs btn-success" id="btnDelBl" onclick="return onClickDelBl('+no+')"> Del </button> ';
@@ -686,7 +695,7 @@
 					isiTrow += '<td><input type="text" class="form-control input-sm" name="t_qty" id="t_qty" value=""></td>';	
 					isiTrow += '<td><input type="text" class="form-control input-sm" name="t_aqty" id="t_aqty" value=""></td>';	
 					isiTrow += '<td class="text-center">';
-		//isiTrow += '<button style="display:none" type="button" class="btn btn-xs btn-info" id="btnWdBl" onclick="return onClickWdBl('+no+')" >WD</button> ';
+		isiTrow += '<button style="display:none" type="button" class="btn btn-xs btn-info" id="btnWdBl" onclick="return onClickWdBl('+no+')" >WD</button> ';
 		isiTrow += '<button type="button" class="btn btn-xs btn-danger" id="btnSaveBl" onclick="return onClickSaveBl('+no+')" >Save</button> ';
 		isiTrow += '<button type="button" class="btn btn-xs btn-success" id="btnAddBl" onclick="return onClickAddBl('+no+')"> Add </button> ';
 		isiTrow += '<button type="button" class="btn btn-xs btn-success" id="btnDelBl" onclick="return onClickDelBl('+no+')"> Del </button> ';
@@ -1363,14 +1372,14 @@
 				
 				$.each(json, function(index, row) {
 					var job_order = row.booking_no + " | " + row.costumer_name;
-					
+				
 					if(row.job_order_id == '<?= $job_order_id ?>'){
 
-						fillOption += '<option selected data-address="" value='+row.job_order_id+'>'+job_order+'</option>';
+						fillOption += '<option selected data-close_date="'+row.close_date+'" data-costumer_code="'+row.costumer_code+'"  data-costumer_name="'+row.costumer_name+'" data-mode_of_transport="'+row.mode_of_transport+'"  value='+row.job_order_id+'>'+job_order+'</option>';
 					
 					}else{
 					
-						fillOption += '<option data-address=""  value='+row.job_order_id+'>'+job_order+'</option>';
+						fillOption += '<option data-close_date="'+row.close_date+'" data-costumer_code="'+row.costumer_code+'"  data-costumer_name="'+row.costumer_name+'" data-mode_of_transport="'+row.mode_of_transport+'" value='+row.job_order_id+'>'+job_order+'</option>';
 					}
 				});
 

@@ -425,9 +425,9 @@
 	
 		isiTrow = '<tr id="'+no+'">';
 		isiTrow += '<td><select class="form-control input-sm" id="document" name="document">'+optionDocument+'</select></td>';
-		isiTrow += '<td><button type="button" class="btn btn-sm btn-primary">Upload</button></td>';
-		isiTrow += '<td><button type="button" class="btn btn-sm btn-primary">Upload</button></td>';
-		isiTrow += '<td><button type="button" class="btn btn-sm btn-primary">Upload</button></td>';
+		isiTrow += '<td><input name="i_upload_original" type="file" /></td>';
+		isiTrow += '<td><input name="i_upload_copy" type="file" /></td>';
+		isiTrow += '<td><input name="i_upload_legalized" type="file" /></td>';
 		isiTrow += '<td><select class="form-control input-sm"><option> Yes </option><option> Not Yet </option></select></td>';
 		isiTrow += '<td><input type="text" class="form-control input-sm" id="note" name="note[]"></td>';
 		isiTrow += '<td class="text-center">';

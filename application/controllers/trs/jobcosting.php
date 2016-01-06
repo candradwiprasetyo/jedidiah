@@ -37,6 +37,7 @@ class Jobcosting extends CI_Controller {
 			$data['jc_booking']					= '';
 			$data['jc_closing_date']			= date("m/d/Y");
 			$data['costumer_code']				= '';
+			$data['costumer_name']				= '';
 			$data['jc_transport_type_id']		= '';
 			$data['jc_eid']						= '';	
 			$data['jc_party']					= '';

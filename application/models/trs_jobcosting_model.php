@@ -58,18 +58,18 @@ class Trs_jobcosting_model extends CI_Model {
 		
 		$data = array(
 			'job_order_id' => $job_order_id,
-			'jc_booking' => $jc_booking,
-			'jc_closing_date' => $this->format_back_date($jc_closing_date),
-			'costumer_code' => $costumer_code,
-			'jc_transport_type_id' => $jc_transport_type_id,
-			'jc_eid' => $jc_eid,
-			'jc_party' => $jc_party,
-			'jc_routing' => $jc_routing,
-			'jc_etd' => $jc_etd,
-			'jc_eta' => $jc_eta,
-			'jc_status_id' => $jc_status_id,
-			'jc_usd_rate' => $jc_usd_rate,
-			'jc_category_id' => $jc_category_id
+			//'jc_booking' => $jc_booking,
+			//'jc_closing_date' => $this->format_back_date($jc_closing_date),
+			//'costumer_code' => $costumer_code,
+			//'jc_transport_type_id' => $jc_transport_type_id,
+			//'jc_eid' => $jc_eid,
+			//'jc_party' => $jc_party,
+			//'jc_routing' => $jc_routing,
+			//'jc_etd' => $jc_etd,
+			//'jc_eta' => $jc_eta,
+			//'jc_status_id' => $jc_status_id,
+			//'jc_usd_rate' => $jc_usd_rate,
+			//'jc_category_id' => $jc_category_id
 		);
 		
 		// input type buying_rate
@@ -485,9 +485,11 @@ class Trs_jobcosting_model extends CI_Model {
 
 	public function getalljoborder()
 	{
-		$this->db->select('a.*, b.costumer_name');
+		$this->db->select('a.*, b.costumer_name, c.close_date, d.mode_of_transport');
 		$this->db->from('trs_job_order a');
 		$this->db->join('mst_costumer b', 'b.costumer_code = a.costumer_code');
+		$this->db->join('trs_job_order_schedule c', 'c.job_order_id = a.job_order_id');
+		$this->db->join('trs_job_order_service d', 'd.job_order_id = a.job_order_id');
 		$query = $this->db->get();
 		return $query->result_array();
 	}

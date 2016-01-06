@@ -23,15 +23,17 @@ class Mst_costumer extends CI_Model {
 	
 	public function getby($categories)
 	{
-		$categories = "C.$categories";
+		//$categories = "C.$categories";
 
 		$this->db->select('C.*');
 		$this->db->from('mst_costumer C');
-		$this->db->where($categories, '1'); 
+		$this->db->where('default_vendor_type', $categories); 
 		
 		$query = $this->db->get();
 		return $query->result_array();
 	}
+
+
 	
 	public function getbynotify()
 	{
